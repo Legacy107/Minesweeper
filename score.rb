@@ -50,4 +50,6 @@ def score()
     end
 end
 
-c
+if __FILE__ == $0
+    score()
+end

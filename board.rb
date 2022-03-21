@@ -24,10 +24,10 @@ def nearby_mines(x, y, width, height, board)
 end
 
 def gen_mines(board, width, height, mines, seed)
+    srand((Time.new().to_f() * 1000000).to_i())
     if !seed
-        seed = rand()
+        seed = (rand() * (10 ** 16)).round()
     end
-    srand(seed)
 
     cells = []
     for i in 0..(height - 1)
@@ -36,7 +36,7 @@ def gen_mines(board, width, height, mines, seed)
         end
     end
 
-    cells.shuffle(random: Random.new(seed))
+    cells.shuffle!(random: Random.new(seed))
 
     for i in 0..(mines - 1)
         board[cells[i][0]][cells[i][1]] = -1
@@ -46,7 +46,7 @@ def gen_mines(board, width, height, mines, seed)
 end
 
 def gen_board(board, width, height, mines, seed)
-    gen_mines(board, width, height, mines, seed)
+    seed = gen_mines(board, width, height, mines, seed)
 
     for i in 0..(height - 1)
         for j in 0..(width - 1)
@@ -129,14 +129,14 @@ def mass_open(x, y, width, height, board, mask)
 
     mask[y][x] = 1
 
-    if board[y][x]
+    if board[y][x] != 0
         return
     end
 
     for i in 0..7
         row = y + drow[i]
         col = x + dcol[i]
-        if is_valid_cell(col, row, width, height) && board[row][col] != -1 && !mask[row][col]
+        if is_valid_cell(col, row, width, height) && board[row][col] != -1 && mask[row][col] == 0
             mass_open(col, row, width, height, board, mask)
         end
     end
@@ -173,7 +173,7 @@ def draw_board(width, height, board, mask, cursor)
 
             if mask[row][column] == -1
                 print("F ".colorize(:color => :light_yellow, :background => background))
-            elsif !mask[row][column]
+            elsif mask[row][column] == 0
                 print('- '.colorize(:color => :light_white, :background => background))
             elsif board[row][column] == -1
                 print('* '.colorize(:color => :light_red, :background => background))
