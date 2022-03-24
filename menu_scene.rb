@@ -24,7 +24,7 @@ def menu_input(game, key_id)
     end
     if key_id == Gosu::KB_C
         game.mode = 0;
-        if (!game.load_board())
+        if !game.load_board()
             return false
         end
         game.change_scene(Scene::GAME)
@@ -47,6 +47,6 @@ def menu_input(game, key_id)
     return false
 end
 
-def menu_scene(game, key_id)
+def menu_process(game, key_id)
     menu_input(game, key_id)
 end

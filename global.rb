@@ -2,7 +2,7 @@ module Scene
     MENU, CHOOSER, GAME, SAW, FINISH, SCORE, EXIT = *0..6
 end
 
-$saw_penalty_duration = 30000
+$saw_penalty_duration = 30
 
 # struct board_option
 # {
@@ -22,5 +22,3 @@ $board_options = [
         ["Saw Expert", 30, 16, 8],
     ]
 ]
-
-$saw_penalty_duration = 30000

@@ -2,11 +2,11 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :mode, :cursor, :remaining_mines, :start_time
+    attr_accessor :mode, :cursor, :remaining_mines, :start_time, :score
     attr_reader :mines, :flags, :width, :height, :board, :mask, :seed
 
     def initialize        
-        @scenes = {}
+        @process_scenes = {}
         @draw_scenes = {}
         @current_scene = Scene::MENU;
         @board = []
@@ -18,18 +18,19 @@ class Minesweeper
         @seed = 0
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
-        @cursor = [0, 0];
-        @start_time = 0;
+        @cursor = [0, 0]
+        @start_time = 0
+        @score = nil
     end
 
-    def add_scene(id, scene, scene_draw)
-        @scenes[id] = scene
+    def add_scene(id, scene_process, scene_draw)
+        @process_scenes[id] = scene_process
         @draw_scenes[id] = scene_draw
     end
 
     def process(key_id)
         if @current_scene != Scene::EXIT
-            @scenes[@current_scene].call(self, key_id)
+            @process_scenes[@current_scene].call(self, key_id)
             return false
         end
         return true

@@ -19,12 +19,12 @@ class GameWindow < Gosu::Window
 
         @prev_key = nil
         @game = Minesweeper.new()
-        @game.add_scene(Scene::MENU, method(:menu_scene), method(:menu_draw))
-        @game.add_scene(Scene::CHOOSER, method(:chooser_scene), method(:chooser_draw))
-        @game.add_scene(Scene::FINISH, method(:end_scene), method(:end_draw))
-        @game.add_scene(Scene::GAME, method(:game_scene), method(:game_draw))
-        @game.add_scene(Scene::SAW, method(:saw_game_scene), method(:saw_game_draw) )
-        @game.add_scene(Scene::SCORE, method(:score_scene), method(:score_draw))
+        @game.add_scene(Scene::MENU, method(:menu_process), method(:menu_draw))
+        @game.add_scene(Scene::CHOOSER, method(:chooser_process), method(:chooser_draw))
+        @game.add_scene(Scene::FINISH, method(:end_process), method(:end_draw))
+        @game.add_scene(Scene::GAME, method(:game_process), method(:game_draw))
+        @game.add_scene(Scene::SAW, method(:saw_game_process), method(:saw_game_draw) )
+        @game.add_scene(Scene::SCORE, method(:score_process), method(:score_draw))
     end
   
     def needs_cursor?()

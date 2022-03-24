@@ -42,6 +42,6 @@ def score_input(game, key_id)
     return false
 end
 
-def score_scene(game, key_id)
+def score_process(game, key_id)
     score_input(game, key_id)
 end

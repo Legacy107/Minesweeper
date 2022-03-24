@@ -74,6 +74,7 @@ def game_input(game, key_id)
                 game.board, game.mask
             )
                 game.change_scene(Scene::FINISH)
+                game.score = get_duration(game.start_time)
             end
             flag = true
         end
@@ -97,7 +98,7 @@ def game_input(game, key_id)
     return flag
 end
 
-def game_scene(game, key_id)
+def game_process(game, key_id)
     if game_input(game, key_id)
         if check_win(
             game.flags, game.mines,

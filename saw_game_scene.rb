@@ -78,9 +78,10 @@ def saw_game_input(game, key_id)
                 game.remaining_mines -= 1
                 if game.remaining_mines == 0
                     game.change_scene(Scene::FINISH)
+                    game.score = get_duration(game.start_time)
                 end
             else
-                game.start_time = Time.at((get_duration(game.start_time) - $saw_penalty_duration) / 10000.0)
+                game.start_time = game.start_time - $saw_penalty_duration
             end
             flag = true
         end
@@ -100,6 +101,6 @@ def saw_game_input(game, key_id)
     return flag
 end
 
-def saw_game_scene(game, key_id)
+def saw_game_process(game, key_id)
    saw_game_input(game, key_id)
 end

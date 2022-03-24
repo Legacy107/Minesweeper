@@ -59,6 +59,6 @@ def chooser_input(game, key_id)
     return false;
 end
 
-def chooser_scene(game, key_id)
+def chooser_process(game, key_id)
     chooser_input(game, key_id)
 end

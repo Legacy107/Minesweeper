@@ -22,10 +22,9 @@ def upper_bound(arr, n)
 end
 
 def get_duration(start_time)
-    end_time = Time.new()
-    duration = end_time.to_f() - start_time.to_f()
+    duration = Time.new() - start_time
 
-    return (duration * 10000).round()
+    return (duration * 1000).round()
 end
 
 # Format duration in ms to Am Bs Cms
