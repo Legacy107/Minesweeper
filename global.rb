@@ -22,3 +22,5 @@ $board_options = [
         ["Saw Expert", 30, 16, 8],
     ]
 ]
+
+$saw_penalty_duration = 30000

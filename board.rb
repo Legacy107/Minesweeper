@@ -74,7 +74,7 @@ def saw_gen_board(board, width, height, mines, seed)
         end
     end
 
-    while cell_queue.length
+    while !cell_queue.empty?()
         cell = cell_queue.pop()
         y = cell[0]
         x = cell[1]

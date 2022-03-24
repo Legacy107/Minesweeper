@@ -2,8 +2,8 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :mode, :cursor
-    attr_reader :mines, :flags, :width, :height, :start_time, :board, :mask, :seed
+    attr_accessor :mode, :cursor, :remaining_mines, :start_time
+    attr_reader :mines, :flags, :width, :height, :board, :mask, :seed
 
     def initialize        
         @scenes = {}
@@ -14,6 +14,7 @@ class Minesweeper
         @width = 0
         @height = 0
         @mines = 0
+        @remaining_mines = 0 # for minesawyer mode
         @seed = 0
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
@@ -75,6 +76,7 @@ class Minesweeper
             @seed = gen_board(@board, width, height, mines, seed)
         elsif @mode == 1
             @seed = saw_gen_board(@board, width, height, mines, seed)
+            @remaining_mines = mines
         end
 
         @start_time = Time.new()

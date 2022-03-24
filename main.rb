@@ -7,6 +7,7 @@ require "./chooser_scene.rb"
 require "./game_scene.rb"
 require "./end_scene.rb"
 require "./score_scene.rb"
+require "./saw_game_scene.rb"
 
 $screen_width = 720
 $screen_height = 480
@@ -22,7 +23,7 @@ class GameWindow < Gosu::Window
         @game.add_scene(Scene::CHOOSER, method(:chooser_scene), method(:chooser_draw))
         @game.add_scene(Scene::FINISH, method(:end_scene), method(:end_draw))
         @game.add_scene(Scene::GAME, method(:game_scene), method(:game_draw))
-        # @game.add_scene(Scene::SAW, saw_game_scene)
+        @game.add_scene(Scene::SAW, method(:saw_game_scene), method(:saw_game_draw) )
         @game.add_scene(Scene::SCORE, method(:score_scene), method(:score_draw))
     end
   
