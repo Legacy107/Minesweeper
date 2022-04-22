@@ -158,34 +158,53 @@ def check_win(flags, mines, width, height, board, mask)
     return true
 end
 
-def draw_board(width, height, board, mask, cursor)
-    print("  ")
-    for column in 1..width
-        print("#{column} ".colorize(:color => :cyan))
-    end
-    puts()
-
+def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse_x, mouse_y)
     for row in 0..(height - 1)
-        print("#{row + 1} ".colorize(:color => :cyan))
-
         for column in 0..(width - 1)
-            background = (cursor[0] == column && cursor[1] == row) ? :light_black : :default
+            index = row * width + column
+            text = ""
+            color = Gosu::Color::BLACK
+            background = Gosu::Color::GRAY
 
             if mask[row][column] == -1
-                print("F ".colorize(:color => :light_yellow, :background => background))
+                text = "F"
+                color = Gosu::Color::YELLOW
             elsif mask[row][column] == 0
-                print('- '.colorize(:color => :light_white, :background => background))
             elsif board[row][column] == -1
-                print('* '.colorize(:color => :light_red, :background => background))
+                text = '*'
+                color = Gosu::Color::RED
             elsif board[row][column] == 0
-                print("#{board[row][column]} ".colorize(:color => :white, :background => background))
+                text = board[row][column].to_s()
             else
-                print("#{board[row][column]} ".colorize(:color => :light_green, :background => background))
+                text = board[row][column].to_s()
+                color = Gosu::Color::GREEN
             end
+
+            if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
+                background = Gosu::Color::AQUA
+            end
+            
+            Gosu.draw_rect(
+                button_bounding_box[index][0][0] - $button_padding,
+                button_bounding_box[index][0][1] - $button_padding,
+                button_bounding_box[index][1][0] - button_bounding_box[index][0][0] + $button_padding * 2,
+                button_bounding_box[index][1][1] - button_bounding_box[index][0][1] + $button_padding * 2,
+                background,
+                ZOrder::MIDDLE,
+                mode=:default
+            )
+            font_text.draw_text(
+                text,
+                button_bounding_box[index][0][0],
+                button_bounding_box[index][0][1],
+                ZOrder::TOP,
+                1.0,
+                1.0,
+                color
+            )
+            
         end
-        puts()
     end
-    puts()
 end
 
 def save_board(width, height, mines, seed, flags, duration, mask)
@@ -221,7 +240,7 @@ def board()
 
     board = [[1, 2], [-1, -1]]
     mask = [[1, 0], [-1, 1]]
-    draw_board(2, 2, board, mask, [0, 1])
+    draw_board(2, 2, board, mask)
 end
 
 if __FILE__ == $0

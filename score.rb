@@ -2,10 +2,10 @@ require "./util.rb"
 
 $score_limit = 5
 
-def get_scores(mines)
+def get_scores(board)
     n = 0
     scores = [];
-    file = File.open("score#{mines}.txt")
+    file = File.open("score#{board}.txt")
 
     n = file.gets().to_i()
 
@@ -22,9 +22,9 @@ def get_highscore(mines)
     return scores[0]
 end
 
-def update_scoreboard(mines, score)
-    scores = get_scores(mines)
-    File.open("score#{mines}.txt", "w") do |file|
+def update_scoreboard(board, score)
+    scores = get_scores(board)
+    File.open("score#{board}.txt", "w") do |file|
         n = [$score_limit, scores.length + 1].min()
         scores = scores.insert(upper_bound(scores, score), score)
         file.write("#{n}\n")

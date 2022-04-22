@@ -2,12 +2,13 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :mode, :cursor, :remaining_mines, :start_time, :score
-    attr_reader :mines, :flags, :width, :height, :board, :mask, :seed
+    attr_accessor :mode, :flags, :remaining_mines, :start_time, :score, :gen_bounding_box
+    attr_reader :mines, :width, :height, :board, :mask, :seed, :current_scene
 
     def initialize        
         @process_scenes = {}
         @draw_scenes = {}
+        @gen_bounding_box = {}
         @current_scene = Scene::MENU;
         @board = []
         @mask = []
@@ -18,14 +19,14 @@ class Minesweeper
         @seed = 0
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
-        @cursor = [0, 0]
         @start_time = 0
         @score = nil
     end
 
-    def add_scene(id, scene_process, scene_draw)
+    def add_scene(id, scene_process, scene_draw, scene_gen_bounding_box)
         @process_scenes[id] = scene_process
         @draw_scenes[id] = scene_draw
+        @gen_bounding_box[id] = scene_gen_bounding_box
     end
 
     def process(key_id)
@@ -36,9 +37,9 @@ class Minesweeper
         return true
     end
 
-    def draw()
+    def draw(font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         if @current_scene != Scene::EXIT
-            @draw_scenes[@current_scene].call(self)
+            @draw_scenes[@current_scene].call(self, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         end
     end
 
@@ -48,7 +49,6 @@ class Minesweeper
 
     def reset_board()
         @flags = 0
-        @cursor = [0, 0]
         @board.clear()
         @mask.clear()
     end

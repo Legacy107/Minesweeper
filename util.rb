@@ -1,4 +1,8 @@
 def upper_bound(arr, n)
+    if arr.empty?()
+        return 0
+    end
+
     left = 0
     right = arr.length - 1
     mid = 0
@@ -36,6 +40,23 @@ def format_duration(duration)
     m = duration
 
     return "#{m}m #{s}s #{ms}ms"
+end
+
+def center_text(font, text, screen_width)
+    return screen_width / 2 - (font.text_width(text) / 2).round()
+end
+
+def mouse_over_button(mouse_x, mouse_y, bounding_box)
+    return (
+        (
+            mouse_x > bounding_box[0][0] and
+            mouse_x < bounding_box[1][0]
+        ) and
+        (
+            mouse_y > bounding_box[0][1] and
+            mouse_y < bounding_box[1][1]
+        )
+    )
 end
 
 def util()
