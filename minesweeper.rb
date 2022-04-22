@@ -2,7 +2,7 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :mode, :flags, :remaining_mines, :start_time, :score, :gen_bounding_box
+    attr_accessor :mode, :flags, :remaining_mines, :start_time, :score, :gen_bounding_box, :auto, :tick
     attr_reader :mines, :width, :height, :board, :mask, :seed, :current_scene
 
     def initialize        
@@ -21,6 +21,8 @@ class Minesweeper
         @mode = 0 # 0: minesweeper  1: minesawyer
         @start_time = 0
         @score = nil
+        @auto = false
+        @tick = 0
     end
 
     def add_scene(id, scene_process, scene_draw, scene_gen_bounding_box)

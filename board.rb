@@ -220,6 +220,113 @@ def save_board(width, height, mines, seed, flags, duration, mask)
     end
 end
 
+def clear_flag(game)
+    for row in 0..(game.height - 1)
+        for column in 0..(game.width - 1)
+            if game.mask[row][column] == -1
+                game.mask[row][column] = 0
+            end
+        end
+    end
+
+    game.flags = 0
+end
+
+# play the best move based on the current state
+# return true if it opened a cell containing a mine
+def next_move(game)
+    guess_factor = 2
+    drow = [-1, -1, -1, 0, 0, 1, 1, 1]
+    dcol = [-1, 0, 1, -1, 1, -1, 0, 1]
+    weights = Array.new(game.height) { Array.new(game.width, 0) }
+
+    for row in 0..(game.height - 1)
+        for column in 0..(game.width - 1)
+            if game.mask[row][column] != 1 || game.board[row][column] == 0
+                next
+            end
+
+            count_empty = 0.0
+            count_flag = 0
+            for i in 0..7
+                a_row = row + drow[i]
+                a_col = column + dcol[i]
+                if is_valid_cell(a_col, a_row, game.width, game.height)
+                    if game.mask[a_row][a_col] == 0
+                        count_empty += 1
+                    end
+
+                    if game.mask[a_row][a_col] == -1
+                        count_flag += 1 
+                    end
+                end
+            end
+
+            if count_flag >= game.board[row][column]
+                weight = -Float::INFINITY
+            else
+                weight = (game.board[row][column] - count_flag) / (count_empty - 1.0)
+            end
+
+            for i in 0..7
+                a_row = row + drow[i]
+                a_col = column + dcol[i]
+                if is_valid_cell(a_col, a_row, game.width, game.height) && game.mask[a_row][a_col] == 0
+                    weights[a_row][a_col] += weight
+                end
+            end
+        end
+    end
+
+    min = Float::INFINITY
+    s_row = -1
+    s_col = -1
+    for row in 0..(game.height - 1)
+        for column in 0..(game.width - 1)
+            if game.mask[row][column] != 0
+                next
+            end
+
+            if weights[row][column] == -Float::INFINITY
+                min = weights[row][column]
+                s_row = row
+                s_col = column
+                break
+            end
+
+            if weights[row][column] == Float::INFINITY
+                game.flags = flag_cell(
+                    column, row,
+                    game.flags, game.mask
+                )
+                return
+            end
+
+            if weights[row][column] < min
+                min = weights[row][column]
+                s_row = row
+                s_col = column
+            elsif (
+                (weights[row][column] - min).abs() < Float::EPSILON &&
+                Random.random_number(guess_factor) == 0
+            )
+                s_row = row
+                s_col = column
+            end
+        end
+
+        if weights[s_row][s_col] == -Float::INFINITY
+            break
+        end
+    end
+
+    return open_cell(
+        s_col, s_row,
+        game.width, game.height,
+        game.board, game.mask
+    )
+end
+
 def board()
     # Driver code for testing
     board = [

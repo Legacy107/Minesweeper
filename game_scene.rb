@@ -12,6 +12,10 @@ def game_gen_box(game, font_title, font_text)
         [10, 10],
         [10 + font_text.text_width("Back"), 10 + font_text.height]
     ]
+    bounding_box << [
+        [$screen_width - 10 - font_text.text_width("Auto"), 10],
+        [$screen_width - 10, 10 + font_text.height]
+    ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
     top_margin = $screen_height * 0.1 + font_title.height * 1
     x_offset = ($screen_width - cell_size * game.width) / 2.0
@@ -82,6 +86,28 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
         Gosu::Color::BLACK
     )
 
+    # Auto button
+    if mouse_over_button(mouse_x, mouse_y, button_bounding_box[1])
+        Gosu.draw_rect(
+            button_bounding_box[1][0][0] - $button_padding,
+            button_bounding_box[1][0][1] - $button_padding,
+            button_bounding_box[1][1][0] - button_bounding_box[1][0][0] + $button_padding * 2,
+            button_bounding_box[1][1][1] - button_bounding_box[1][0][1] + $button_padding * 2,
+            Gosu::Color::YELLOW,
+            ZOrder::MIDDLE,
+            mode=:default
+        )
+    end
+    font_text.draw_text(
+        "Auto",
+        button_bounding_box[1][0][0],
+        button_bounding_box[1][0][1],
+        ZOrder::TOP,
+        1.0,
+        1.0,
+        Gosu::Color::BLACK
+    )
+
     font_title.draw_text(
         remainingFlagsText,
         $screen_width / 2.0 - font_title.text_width(remainingFlagsText) - 20,
@@ -104,7 +130,7 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
     draw_board(
         game.width, game.height,
         game.board, game.mask,
-        font_text, button_bounding_box.slice(1..-1),
+        font_text, button_bounding_box.slice(2..-1),
         mouse_x, mouse_y
     )
 
@@ -121,9 +147,13 @@ def game_input(game, key_id)
         )
         game.change_scene(Scene::MENU)
         flag = true
+    elsif key_id == 1
+        clear_flag(game)
+        game.auto = true
+        flag = true
     elsif key_id
-        cell_x = (key_id.abs() - 1) % game.width
-        cell_y = (key_id.abs() - 1).div(game.width)
+        cell_x = (key_id.abs() - 2) % game.width
+        cell_y = (key_id.abs() - 2).div(game.width)
 
         # right click -> open a cell
         if key_id > 0 && game.mask[cell_y][cell_x] == 0
@@ -150,8 +180,20 @@ def game_input(game, key_id)
 end
 
 def game_process(game, key_id)
-    if Time.new().to_i() % 2 == 0
-        if next_move(game)
+    if game.auto
+        if key_id == 1
+            game.auto = false
+            return
+        end
+
+        if game.tick % 20 == 0
+            if next_move(game)
+                # handle lost
+                game.score = get_duration(game.start_time)
+                game.auto = false
+                game.change_scene(Scene::FINISH)
+            end
+
             if check_win(
                 game.flags, game.mines,
                 game.width, game.height,
@@ -164,9 +206,13 @@ def game_process(game, key_id)
                     }
                 )[0][0]
                 update_scoreboard(file, game.score)
+                game.auto = false
                 game.change_scene(Scene::FINISH)
+                return
             end
         end
+        game.tick += 1
+        return
     end
     if game_input(game, key_id)
         if check_win(
