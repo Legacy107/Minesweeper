@@ -180,7 +180,10 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
                 color = Gosu::Color::GREEN
             end
 
-            if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
+            if (
+                mouse_over_button(mouse_x, mouse_y, button_bounding_box[index]) ||
+                mask[row][column] > 1
+            )
                 background = Gosu::Color::AQUA
             end
             
@@ -233,8 +236,9 @@ def clear_flag(game)
 end
 
 # play the best move based on the current state
-# return true if it opened a cell containing a mine
-def next_move(game)
+# return [x, y, action]
+# action: 2 -> flag, 3 -> open
+def get_next_move(game)
     guess_factor = 2
     drow = [-1, -1, -1, 0, 0, 1, 1, 1]
     dcol = [-1, 0, 1, -1, 1, -1, 0, 1]
@@ -242,6 +246,11 @@ def next_move(game)
 
     for row in 0..(game.height - 1)
         for column in 0..(game.width - 1)
+            # remove highlighting
+            if game.mask[row][column] > 1
+                game.mask[row][column] = 0
+            end
+
             if game.mask[row][column] != 1 || game.board[row][column] == 0
                 next
             end
@@ -295,11 +304,7 @@ def next_move(game)
             end
 
             if weights[row][column] == Float::INFINITY
-                game.flags = flag_cell(
-                    column, row,
-                    game.flags, game.mask
-                )
-                return
+                return [column, row, 2]
             end
 
             if weights[row][column] < min
@@ -320,11 +325,7 @@ def next_move(game)
         end
     end
 
-    return open_cell(
-        s_col, s_row,
-        game.width, game.height,
-        game.board, game.mask
-    )
+    return [s_col, s_row, 3]
 end
 
 def board()

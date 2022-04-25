@@ -186,29 +186,55 @@ def game_process(game, key_id)
             return
         end
 
-        if game.tick % 20 == 0
-            if next_move(game)
-                # handle lost
-                game.score = get_duration(game.start_time)
-                game.auto = false
-                game.change_scene(Scene::FINISH)
+        if game.tick % 10 == 0
+            flag = true
+            for row in 0..(game.height - 1)
+                for column in 0..(game.width - 1)
+                    if game.mask[row][column] == 2
+                        game.flags = flag_cell(
+                            column, row,
+                            game.flags, game.mask
+                        )
+                        flag = false
+                        next
+                    end
+
+                    if game.mask[row][column] == 3
+                        if open_cell(
+                            column, row,
+                            game.width, game.height,
+                            game.board, game.mask
+                        )
+                            # handle lost
+                            game.score = get_duration(game.start_time)
+                            game.auto = false
+                            game.change_scene(Scene::FINISH)
+                        end
+                        flag = false
+                    end
+                end
             end
 
-            if check_win(
-                game.flags, game.mines,
-                game.width, game.height,
-                game.board, game.mask
-            )
-                game.score = get_duration(game.start_time)
-                file = (
-                    $board_options[game.mode].filter() {|board|
-                        board[3] == game.mines
-                    }
-                )[0][0]
-                update_scoreboard(file, game.score)
-                game.auto = false
-                game.change_scene(Scene::FINISH)
-                return
+            if flag
+                x, y, action = get_next_move(game)
+                game.mask[y][x] = action
+            else
+                if check_win(
+                    game.flags, game.mines,
+                    game.width, game.height,
+                    game.board, game.mask
+                )
+                    game.score = get_duration(game.start_time)
+                    file = (
+                        $board_options[game.mode].filter() {|board|
+                            board[3] == game.mines
+                        }
+                    )[0][0]
+                    update_scoreboard(file, game.score)
+                    game.auto = false
+                    game.change_scene(Scene::FINISH)
+                    return
+                end
             end
         end
         game.tick += 1
