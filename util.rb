@@ -26,7 +26,8 @@ def upper_bound(arr, n)
 end
 
 def get_duration(start_time)
-    duration = Time.new() - start_time
+    end_time = Time.new()
+    duration = end_time - (start_time || end_time)
 
     return (duration * 1000).round()
 end

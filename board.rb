@@ -23,7 +23,7 @@ def nearby_mines(x, y, width, height, board)
     return count
 end
 
-def gen_mines(board, width, height, mines, seed)
+def gen_mines(board, width, height, mines, seed, x, y)
     srand((Time.new().to_f() * 1000000).to_i())
     if !seed
         seed = (rand() * (10 ** 16)).round()
@@ -32,6 +32,11 @@ def gen_mines(board, width, height, mines, seed)
     cells = []
     for i in 0..(height - 1)
         for j in 0..(width - 1)
+            # The first cell and 9 cells around it must not contain mines
+            if Math.sqrt((j - x) ** 2 + (i - y) ** 2) < 2.0
+                next
+            end
+
             cells << [i, j]
         end
     end
@@ -45,8 +50,8 @@ def gen_mines(board, width, height, mines, seed)
     return seed
 end
 
-def gen_board(board, width, height, mines, seed)
-    seed = gen_mines(board, width, height, mines, seed)
+def gen_board(board, width, height, mines, seed, x, y)
+    seed = gen_mines(board, width, height, mines, seed, x, y)
 
     for i in 0..(height - 1)
         for j in 0..(width - 1)
@@ -98,15 +103,19 @@ def saw_gen_board(board, width, height, mines, seed)
     return seed
 end
 
-def open_cell(x, y, width, height, board, mask)
-    if board[y][x] == -1
-        mask[y][x] = 1
+def open_cell(x, y, game)
+    if game.seed == nil
+        game.populate_board(x, y)
+    end
+
+    if game.board[y][x] == -1
+        game.mask[y][x] = 1
         return true
     end
-    if board[y][x] == 0
-        mass_open(x, y, width, height, board, mask)
+    if game.board[y][x] == 0
+        mass_open(x, y, game.width, game.height, game.board, game.mask)
     else
-        mask[y][x] = 1
+        game.mask[y][x] = 1
     end
     return false
 end
@@ -169,7 +178,7 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
             if mask[row][column] == -1
                 text = "F"
                 color = Gosu::Color::YELLOW
-            elsif mask[row][column] == 0
+            elsif mask[row][column] == 0 || mask[row][column] > 1
             elsif board[row][column] == -1
                 text = '*'
                 color = Gosu::Color::RED
@@ -239,6 +248,11 @@ end
 # return [x, y, action]
 # action: 2 -> flag, 3 -> open
 def get_next_move(game)
+    # open middle cell on first move
+    if game.seed == nil
+        return [game.width / 2, game.height / 2, 3]
+    end
+
     guess_factor = 2
     drow = [-1, -1, -1, 0, 0, 1, 1, 1]
     dcol = [-1, 0, 1, -1, 1, -1, 0, 1]

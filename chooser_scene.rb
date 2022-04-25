@@ -110,7 +110,7 @@ def chooser_input(game, key_id)
     keys = [0, 1, 2]
     for i in 0..($board_options[game.mode].length - 1)
         if key_id == keys[i]
-            game.create_board(
+            game.init_board(
                 $board_options[game.mode][i][1],
                 $board_options[game.mode][i][2],
                 $board_options[game.mode][i][3]

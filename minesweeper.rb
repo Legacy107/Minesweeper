@@ -19,7 +19,7 @@ class Minesweeper
         @seed = 0
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
-        @start_time = 0
+        @start_time = nil
         @score = nil
         @auto = false
         @tick = 0
@@ -70,16 +70,18 @@ class Minesweeper
         end
     end
 
-    def create_board(width, height, mines, seed = nil)
+    def init_board(width, height, mines, seed = nil)
+        @start_time = nil
         reset_board()
-
         get_blank_board(width, height, mines, seed)
+    end
 
+    def populate_board(x = -10, y = -10)
         if @mode == 0
-            @seed = gen_board(@board, width, height, mines, seed)
+            @seed = gen_board(@board, @width, @height, @mines, @seed, x, y)
         elsif @mode == 1
-            @seed = saw_gen_board(@board, width, height, mines, seed)
-            @remaining_mines = mines
+            @seed = saw_gen_board(@board, @width, @height, @mines, @seed)
+            @remaining_mines = @mines
         end
 
         @start_time = Time.new()
@@ -103,7 +105,10 @@ class Minesweeper
         # Read board
         width, height, mines, seed, flags, duration = board_info
 
-        create_board(width, height, mines, seed)
+        self.init_board(width, height, mines, seed)
+        if seed != nil
+            self.populate_board()
+        end
 
         @flags = flags
         @start_time = Time.at(@start_time.to_f() - duration.to_f() / 10000.0)

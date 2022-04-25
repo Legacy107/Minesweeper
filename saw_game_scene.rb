@@ -123,11 +123,7 @@ def saw_game_input(game, key_id)
 
         # right click -> open a cell
         if key_id > 0 && game.mask[cell_y][cell_x] == 0
-            if open_cell(
-                cell_x, cell_y,
-                game.width, game.height,
-                game.board, game.mask
-            )
+            if open_cell(cell_x, cell_y, game)
                 game.remaining_mines -= 1
                 if game.remaining_mines == 0
                     game.score = get_duration(game.start_time)

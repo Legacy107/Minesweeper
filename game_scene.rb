@@ -157,11 +157,7 @@ def game_input(game, key_id)
 
         # right click -> open a cell
         if key_id > 0 && game.mask[cell_y][cell_x] == 0
-            if open_cell(
-                cell_x, cell_y,
-                game.width, game.height,
-                game.board, game.mask
-            )
+            if open_cell(cell_x, cell_y, game)
                 game.score = get_duration(game.start_time)
                 game.change_scene(Scene::FINISH)
             end
@@ -200,11 +196,7 @@ def game_process(game, key_id)
                     end
 
                     if game.mask[row][column] == 3
-                        if open_cell(
-                            column, row,
-                            game.width, game.height,
-                            game.board, game.mask
-                        )
+                        if open_cell(column, row, game)
                             # handle lost
                             game.score = get_duration(game.start_time)
                             game.auto = false
