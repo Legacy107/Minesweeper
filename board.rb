@@ -26,7 +26,8 @@ end
 def gen_mines(board, width, height, mines, seed, x, y)
     srand((Time.new().to_f() * 1000000).to_i())
     if !seed
-        seed = (rand() * (10 ** 16)).round()
+        # embed first open inside seed
+        seed = (rand() * (10 ** 16)).round() * 100 + x * 10 + y
     end
 
     cells = []
@@ -221,7 +222,7 @@ end
 
 def save_board(width, height, mines, seed, flags, duration, mask)
     File.open("board.txt", "w") do |file|
-        file.write("#{width} #{height} #{mines} #{seed} #{flags} #{duration}\n")
+        file.write("#{width} #{height} #{mines} #{seed || -1} #{flags} #{duration}\n")
         
         for i in 0..(height - 1)
             for j in 0..(width - 1)

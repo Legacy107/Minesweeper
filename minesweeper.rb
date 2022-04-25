@@ -16,7 +16,7 @@ class Minesweeper
         @height = 0
         @mines = 0
         @remaining_mines = 0 # for minesawyer mode
-        @seed = 0
+        @seed = nil
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
         @start_time = nil
@@ -104,14 +104,21 @@ class Minesweeper
         
         # Read board
         width, height, mines, seed, flags, duration = board_info
+        seed = (seed == -1 ? nil : seed)
 
         self.init_board(width, height, mines, seed)
         if seed != nil
-            self.populate_board()
+            x = seed % 100 / 10
+            y = seed % 10
+            self.populate_board(x, y)
         end
 
         @flags = flags
-        @start_time = Time.at(@start_time.to_f() - duration.to_f() / 10000.0)
+        @start_time = (
+            seed ?
+            Time.at(@start_time.to_f() - duration.to_f() / 10000.0) :
+            nil
+        )
 
         # Read mask
         for i in 0..(height - 1)
