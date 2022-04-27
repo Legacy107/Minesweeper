@@ -1,3 +1,4 @@
+require "gosu"
 require "./global.rb"
 require "./util.rb"
 
@@ -9,7 +10,7 @@ class Minesweeper
         @process_scenes = {}
         @draw_scenes = {}
         @gen_bounding_box = {}
-        @current_scene = Scene::MENU;
+        @current_scene = nil;
         @board = []
         @mask = []
         @width = 0
@@ -23,6 +24,8 @@ class Minesweeper
         @score = nil
         @auto = false
         @tick = 0
+        @track = nil
+        @track_location = ""
     end
 
     def add_scene(id, scene_process, scene_draw, scene_gen_bounding_box)
@@ -47,6 +50,12 @@ class Minesweeper
 
     def change_scene(scene)
         @current_scene = scene
+        if ($tracks[scene] && @track_location != $tracks[scene])
+            @track_location = $tracks[scene]
+            @track = Gosu::Song.new(@track_location)
+            @track.volume = 0.4
+            @track.play(looping=true)
+        end
     end
 
     def reset_board()
@@ -71,6 +80,7 @@ class Minesweeper
     end
 
     def init_board(width, height, mines, seed = nil)
+        @auto = false
         @start_time = nil
         reset_board()
         get_blank_board(width, height, mines, seed)
@@ -80,7 +90,7 @@ class Minesweeper
         if @mode == 0
             @seed = gen_board(@board, @width, @height, @mines, @seed, x, y)
         elsif @mode == 1
-            @seed = saw_gen_board(@board, @width, @height, @mines, @seed)
+            @seed = saw_gen_board(@board, @width, @height, @mines, @seed, x, y)
             @remaining_mines = @mines
         end
 

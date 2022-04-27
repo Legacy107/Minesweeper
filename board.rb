@@ -1,6 +1,5 @@
-require 'io/console'
-require 'colorize'
 require 'gosu'
+require './global.rb'
 
 def is_valid_cell(x, y, width, height)
     return (0 <= x && x < width && 0 <= y && y < height)
@@ -65,12 +64,12 @@ def gen_board(board, width, height, mines, seed, x, y)
     return seed
 end
 
-def saw_gen_board(board, width, height, mines, seed)
+def saw_gen_board(board, width, height, mines, seed, x, y)
     drow = [-1, 0, 0, 1]
     dcol = [0, -1, 1, 0]
     cell_queue = Queue.new()
 
-    gen_mines(board, width, height, mines, seed)
+    seed = gen_mines(board, width, height, mines, seed, x, y)
 
     for i in 0..(height - 1)
         for j in 0..(width - 1)

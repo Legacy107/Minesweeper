@@ -27,6 +27,10 @@ class GameWindow < Gosu::Window
         @game.add_scene(Scene::GAME, method(:game_process), method(:game_draw), method(:game_gen_box))
         @game.add_scene(Scene::SAW, method(:saw_game_process), method(:saw_game_draw), method(:saw_gen_box))
         @game.add_scene(Scene::SCORE, method(:score_process), method(:score_draw), method(:score_gen_box))
+        @game.change_scene(Scene::MENU)
+
+        @sfx_open = Gosu::Sample.new($tracks["open"])
+        @sfx_flag = Gosu::Sample.new($tracks["flag"])
     end
   
     def needs_cursor?()
@@ -45,7 +49,6 @@ class GameWindow < Gosu::Window
     end
   
     def draw()
-        $stdout.clear_screen()
         Gosu.draw_rect(0, 0, $screen_width, $screen_height, @background, ZOrder::BACKGROUND, mode=:default)
         @game.draw(@font_title, @font_text, @button_bounding_box, mouse_x, mouse_y)
     end
@@ -55,12 +58,14 @@ class GameWindow < Gosu::Window
         when Gosu::MsLeft
             @button_bounding_box.each_with_index do |button, index|
                 if mouse_over_button(mouse_x, mouse_y, button)
+                    @sfx_open.play()
                     @game.process(index)
                 end
             end
         when Gosu::KB_M
             @button_bounding_box.each_with_index do |button, index|
                 if mouse_over_button(mouse_x, mouse_y, button)
+                    @sfx_flag.play()
                     @game.process(-index)
                 end
             end

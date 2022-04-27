@@ -9,6 +9,14 @@ module Scene
     MENU, CHOOSER, GAME, SAW, FINISH, SCORE, EXIT = *0..6
 end
 
+$tracks = {
+    Scene::MENU => "./assets/Ludum Dare 38 - Track 1.wav",
+    Scene::GAME => "./assets/Ludum Dare 38 - Track 2.wav",
+    Scene::SAW => "./assets/Ludum Dare 38 - Track 2.wav",
+    "open" => "./assets/click1.ogg",
+    "flag" => "./assets/click4.ogg",
+}
+
 $saw_penalty_duration = 30
 
 $minesawyer_rules = [
