@@ -26,8 +26,8 @@ end
 def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     font_title.draw_text(
         "High Score",
-        center_text(font_title, "High Score", $screen_width),
-        $screen_height * 0.1,
+        center_text(font_title, "High Score", GameSettings::SCREEN_WIDTH),
+        GameSettings::SCREEN_HEIGHT * 0.1,
         ZOrder::TOP,
         1.0,
         1.0,
@@ -47,10 +47,10 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
 
         if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
             Gosu.draw_rect(
-                button_bounding_box[index][0][0] - $button_padding,
-                button_bounding_box[index][0][1] - $button_padding,
-                button_bounding_box[index][1][0] - button_bounding_box[index][0][0] + $button_padding * 2,
-                button_bounding_box[index][1][1] - button_bounding_box[index][0][1] + $button_padding * 2,
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING,
+                button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING,
+                button_bounding_box[index][1][0] - button_bounding_box[index][0][0] + GameSettings::BUTTON_PADDING * 2,
+                button_bounding_box[index][1][1] - button_bounding_box[index][0][1] + GameSettings::BUTTON_PADDING * 2,
                 Gosu::Color::YELLOW,
                 ZOrder::MIDDLE,
                 mode=:default
@@ -59,14 +59,14 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
     end
 
     x_offset = 20
-    y_offset = $screen_height * 0.2
-    for i in 0..($board_options.length - 1)
-        for j in 0..($board_options[i].length - 1)
-            scores = get_scores($board_options[i][j][0])
-            y_offset = $screen_height * 0.2 + font_text.height * 10.5 * i
+    y_offset = GameSettings::SCREEN_HEIGHT * 0.2
+    for i in 0..(GameRules::BOARD_OPTIONS.length - 1)
+        for j in 0..(GameRules::BOARD_OPTIONS[i].length - 1)
+            scores = get_scores(GameRules::BOARD_OPTIONS[i][j][0])
+            y_offset = GameSettings::SCREEN_HEIGHT * 0.2 + font_text.height * 10.5 * i
 
             font_text.draw_text(
-                "#{$board_options[i][j][0]} scoreboard",
+                "#{GameRules::BOARD_OPTIONS[i][j][0]} scoreboard",
                 x_offset,
                 y_offset,
                 ZOrder::TOP,
@@ -94,7 +94,7 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
                 y_offset += font_text.height * 1.5
             end
 
-            x_offset += ($screen_height / $board_options.length).round()
+            x_offset += (GameSettings::SCREEN_HEIGHT / GameRules::BOARD_OPTIONS.length).round()
         end
         x_offset = 15
     end

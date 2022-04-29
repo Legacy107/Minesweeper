@@ -50,8 +50,8 @@ class Minesweeper
 
     def change_scene(scene)
         @current_scene = scene
-        if ($tracks[scene] && @track_location != $tracks[scene])
-            @track_location = $tracks[scene]
+        if (GameSettings::TRACKS[scene] && @track_location != GameSettings::TRACKS[scene])
+            @track_location = GameSettings::TRACKS[scene]
             @track = Gosu::Song.new(@track_location)
             @track.volume = 0.4
             @track.play(looping=true)

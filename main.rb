@@ -12,7 +12,7 @@ require "./saw_game_scene.rb"
 
 class GameWindow < Gosu::Window
     def initialize()
-        super($screen_width, $screen_height, false)
+        super(GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, false)
         self.caption = "Minesawyer"
 
         @background = Gosu::Color::WHITE
@@ -29,8 +29,8 @@ class GameWindow < Gosu::Window
         @game.add_scene(Scene::SCORE, method(:score_process), method(:score_draw), method(:score_gen_box))
         @game.change_scene(Scene::MENU)
 
-        @sfx_open = Gosu::Sample.new($tracks["open"])
-        @sfx_flag = Gosu::Sample.new($tracks["flag"])
+        @sfx_open = Gosu::Sample.new(GameSettings::TRACKS["open"])
+        @sfx_flag = Gosu::Sample.new(GameSettings::TRACKS["flag"])
     end
   
     def needs_cursor?()
@@ -49,7 +49,7 @@ class GameWindow < Gosu::Window
     end
   
     def draw()
-        Gosu.draw_rect(0, 0, $screen_width, $screen_height, @background, ZOrder::BACKGROUND, mode=:default)
+        Gosu.draw_rect(0, 0, GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, @background, ZOrder::BACKGROUND, mode=:default)
         @game.draw(@font_title, @font_text, @button_bounding_box, mouse_x, mouse_y)
     end
 

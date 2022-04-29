@@ -13,13 +13,13 @@ def game_gen_box(game, font_title, font_text)
         [10 + font_text.text_width("Back"), 10 + font_text.height]
     ]
     bounding_box << [
-        [$screen_width - 10 - font_text.text_width("Auto"), 10],
-        [$screen_width - 10, 10 + font_text.height]
+        [GameSettings::SCREEN_WIDTH - 10 - font_text.text_width("Auto"), 10],
+        [GameSettings::SCREEN_WIDTH - 10, 10 + font_text.height]
     ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
-    top_margin = $screen_height * 0.1 + font_title.height * 1
-    x_offset = ($screen_width - cell_size * game.width) / 2.0
-    y_offset = ($screen_height - top_margin - cell_size * game.height) / 2.0 + top_margin
+    top_margin = GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1
+    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
+    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game.height) / 2.0 + top_margin
     for i in 1..game.height
         for j in 1..game.width
             bounding_box << [
@@ -30,7 +30,7 @@ def game_gen_box(game, font_title, font_text)
             x_offset += cell_size
         end
 
-        x_offset = ($screen_width - cell_size * game.width) / 2.0
+        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
         y_offset += cell_size
     end
     bounding_box << Scene::GAME
@@ -41,8 +41,8 @@ end
 def draw_instruction(font_text)
     font_text.draw_text(
         "Left click to open a cell",
-        $screen_width / 2.0 - font_text.text_width("Left click to open a cell") - 20,
-        $screen_height - font_text.height - 10,
+        GameSettings::SCREEN_WIDTH / 2.0 - font_text.text_width("Left click to open a cell") - 20,
+        GameSettings::SCREEN_HEIGHT - font_text.height - 10,
         ZOrder::TOP,
         1.0,
         1.0,
@@ -51,8 +51,8 @@ def draw_instruction(font_text)
 
     font_text.draw_text(
         "Right click to set a flag",
-        $screen_width / 2.0 + 20,
-        $screen_height - font_text.height - 10,
+        GameSettings::SCREEN_WIDTH / 2.0 + 20,
+        GameSettings::SCREEN_HEIGHT - font_text.height - 10,
         ZOrder::TOP,
         1.0,
         1.0,
@@ -67,10 +67,10 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
     # Back button
     if mouse_over_button(mouse_x, mouse_y, button_bounding_box[0])
         Gosu.draw_rect(
-            button_bounding_box[0][0][0] - $button_padding,
-            button_bounding_box[0][0][1] - $button_padding,
-            button_bounding_box[0][1][0] - button_bounding_box[0][0][0] + $button_padding * 2,
-            button_bounding_box[0][1][1] - button_bounding_box[0][0][1] + $button_padding * 2,
+            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[0][1][0] - button_bounding_box[0][0][0] + GameSettings::BUTTON_PADDING * 2,
+            button_bounding_box[0][1][1] - button_bounding_box[0][0][1] + GameSettings::BUTTON_PADDING * 2,
             Gosu::Color::YELLOW,
             ZOrder::MIDDLE,
             mode=:default
@@ -89,10 +89,10 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
     # Auto button
     if mouse_over_button(mouse_x, mouse_y, button_bounding_box[1])
         Gosu.draw_rect(
-            button_bounding_box[1][0][0] - $button_padding,
-            button_bounding_box[1][0][1] - $button_padding,
-            button_bounding_box[1][1][0] - button_bounding_box[1][0][0] + $button_padding * 2,
-            button_bounding_box[1][1][1] - button_bounding_box[1][0][1] + $button_padding * 2,
+            button_bounding_box[1][0][0] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[1][0][1] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[1][1][0] - button_bounding_box[1][0][0] + GameSettings::BUTTON_PADDING * 2,
+            button_bounding_box[1][1][1] - button_bounding_box[1][0][1] + GameSettings::BUTTON_PADDING * 2,
             Gosu::Color::YELLOW,
             ZOrder::MIDDLE,
             mode=:default
@@ -110,8 +110,8 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
 
     font_title.draw_text(
         remainingFlagsText,
-        $screen_width / 2.0 - font_title.text_width(remainingFlagsText) - 20,
-        $screen_height * 0.1,
+        GameSettings::SCREEN_WIDTH / 2.0 - font_title.text_width(remainingFlagsText) - 20,
+        GameSettings::SCREEN_HEIGHT * 0.1,
         ZOrder::TOP,
         1.0,
         1.0,
@@ -119,8 +119,8 @@ def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
     )
     font_title.draw_text(
         timerText,
-        $screen_width / 2.0 + 20,
-        $screen_height * 0.1,
+        GameSettings::SCREEN_WIDTH / 2.0 + 20,
+        GameSettings::SCREEN_HEIGHT * 0.1,
         ZOrder::TOP,
         1.0,
         1.0,
@@ -218,7 +218,7 @@ def game_process(game, key_id)
                 )
                     game.score = get_duration(game.start_time)
                     file = (
-                        $board_options[game.mode].filter() {|board|
+                        GameRules::BOARD_OPTIONS[game.mode].filter() {|board|
                             board[3] == game.mines
                         }
                     )[0][0]
@@ -240,7 +240,7 @@ def game_process(game, key_id)
         )
             game.score = get_duration(game.start_time)
             file = (
-                $board_options[game.mode].filter() {|board|
+                GameRules::BOARD_OPTIONS[game.mode].filter() {|board|
                     board[3] == game.mines
                 }
             )[0][0]

@@ -13,9 +13,9 @@ def end_gen_box(game, font_title, font_text)
         [10 + font_text.text_width("Back"), 10 + font_text.height]
     ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
-    top_margin = $screen_height * 0.1 + font_title.height * 1
-    x_offset = ($screen_width - cell_size * game.width) / 2.0
-    y_offset = ($screen_height - top_margin - cell_size * game.height) / 2.0 + top_margin
+    top_margin = GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1
+    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
+    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game.height) / 2.0 + top_margin
     for i in 1..game.height
         for j in 1..game.width
             bounding_box << [
@@ -26,7 +26,7 @@ def end_gen_box(game, font_title, font_text)
             x_offset += cell_size
         end
 
-        x_offset = ($screen_width - cell_size * game.width) / 2.0
+        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
         y_offset += cell_size
     end
     bounding_box << Scene::FINISH
@@ -38,10 +38,10 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     # Back button
     if mouse_over_button(mouse_x, mouse_y, button_bounding_box[0])
         Gosu.draw_rect(
-            button_bounding_box[0][0][0] - $button_padding,
-            button_bounding_box[0][0][1] - $button_padding,
-            button_bounding_box[0][1][0] - button_bounding_box[0][0][0] + $button_padding * 2,
-            button_bounding_box[0][1][1] - button_bounding_box[0][0][1] + $button_padding * 2,
+            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING,
+            button_bounding_box[0][1][0] - button_bounding_box[0][0][0] + GameSettings::BUTTON_PADDING * 2,
+            button_bounding_box[0][1][1] - button_bounding_box[0][0][1] + GameSettings::BUTTON_PADDING * 2,
             Gosu::Color::YELLOW,
             ZOrder::MIDDLE,
             mode=:default
@@ -63,7 +63,7 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         game.board, game.mask
     )
         file = (
-            $board_options[game.mode].filter() {|board|
+            GameRules::BOARD_OPTIONS[game.mode].filter() {|board|
                 board[3] == game.mines
             }
         )[0][0]
@@ -72,8 +72,8 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
 
         font_title.draw_text(
             "You win!",
-            center_text(font_title, "You win!", $screen_width),
-            $screen_height * 0.1,
+            center_text(font_title, "You win!", GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.1,
             ZOrder::TOP,
             1.0,
             1.0,
@@ -82,8 +82,8 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
 
         font_title.draw_text(
             highscore_text,
-            center_text(font_title, highscore_text, $screen_width),
-            $screen_height * 0.1 + font_title.height * 1.5,
+            center_text(font_title, highscore_text, GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1.5,
             ZOrder::TOP,
             1.0,
             1.0,
@@ -92,8 +92,8 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     else
         font_title.draw_text(
             "You lose!",
-            center_text(font_title, "You lose!", $screen_width),
-            $screen_height * 0.1,
+            center_text(font_title, "You lose!", GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.1,
             ZOrder::TOP,
             1.0,
             1.0,
