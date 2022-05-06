@@ -43,8 +43,16 @@ def format_duration(duration)
     return "#{m}m #{s}s #{ms}ms"
 end
 
+def center_box(screen_width, width)
+    return screen_width / 2 - (width / 2).round()
+end
+
 def center_text(font, text, screen_width)
-    return screen_width / 2 - (font.text_width(text) / 2).round()
+    return center_box(screen_width, font.text_width(text))
+end
+
+def center_image(image, scale, screen_width)
+    center_box(screen_width, image.width * scale)
 end
 
 def mouse_over_button(mouse_x, mouse_y, bounding_box)

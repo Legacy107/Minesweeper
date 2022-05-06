@@ -15,7 +15,7 @@ class GameWindow < Gosu::Window
         super(GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, false)
         self.caption = "Minesawyer"
 
-        @background = Gosu::Color::WHITE
+        @background = Gosu::Image.new(GameSettings::SPRITE["background"], { :tileable => true })
         @font_title = Gosu::Font.new(26)
         @font_text = Gosu::Font.new(20)
         @button_bounding_box = [-1]
@@ -47,9 +47,25 @@ class GameWindow < Gosu::Window
             close()
         end
     end
+
+    def draw_background()
+        bg_x = 0
+        while bg_x < GameSettings::SCREEN_WIDTH
+            bg_y = 0
+            while bg_y < GameSettings::SCREEN_HEIGHT
+                @background.draw(
+                    bg_x, bg_y,
+                    ZOrder::BACKGROUND,
+                    1, 1
+                )
+                bg_y += @background.height
+            end
+            bg_x += @background.width
+        end
+    end
   
     def draw()
-        Gosu.draw_rect(0, 0, GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, @background, ZOrder::BACKGROUND, mode=:default)
+        self.draw_background()
         @game.draw(@font_title, @font_text, @button_bounding_box, mouse_x, mouse_y)
     end
 

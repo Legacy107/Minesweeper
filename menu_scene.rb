@@ -17,7 +17,7 @@ def menu_gen_box(game, font_title, font_text)
             [x_start, y_offset],
             [x_start + font_text.text_width(button), y_offset + font_text.height]
         ]
-        y_offset += font_text.height * 2
+        y_offset += font_text.height * 2.5
     end
     bounding_box << Scene::MENU
 
@@ -25,16 +25,17 @@ def menu_gen_box(game, font_title, font_text)
 end
 
 def menu_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
-    font_title.draw_text(
-        "MINESWEEPER",
-        center_text(font_title, "MINESWEEPER", GameSettings::SCREEN_WIDTH),
-        GameSettings::SCREEN_HEIGHT * 0.25,
+    title_image = Gosu::Image.new(GameSettings::SPRITE["title"])
+    title_image.draw(
+        center_image(title_image, 0.8, GameSettings::SCREEN_WIDTH),
+        GameSettings::SCREEN_HEIGHT * 0.2,
         ZOrder::TOP,
-        1.0,
-        1.0,
-        Gosu::Color::BLACK
+        0.8,
+        0.8
     )
 
+    button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
+    button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
     menu_get_buttons().each_with_index() do |button, index|
         font_text.draw_text(
             button,
@@ -45,16 +46,22 @@ def menu_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
             1.0,
             Gosu::Color::BLACK
         )
+        button_bg.draw_as_quad(
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            ZOrder::MIDDLE,
+        )
+
 
         if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
-            Gosu.draw_rect(
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING,
-                button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING,
-                button_bounding_box[index][1][0] - button_bounding_box[index][0][0] + GameSettings::BUTTON_PADDING * 2,
-                button_bounding_box[index][1][1] - button_bounding_box[index][0][1] + GameSettings::BUTTON_PADDING * 2,
-                Gosu::Color::YELLOW,
+            button_hover_bg.draw_as_quad(
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
                 ZOrder::MIDDLE,
-                mode=:default
             )
         end
     end

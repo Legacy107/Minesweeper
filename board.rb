@@ -197,10 +197,10 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
             end
             
             Gosu.draw_rect(
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING,
-                button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING,
-                button_bounding_box[index][1][0] - button_bounding_box[index][0][0] + GameSettings::BUTTON_PADDING * 2,
-                button_bounding_box[index][1][1] - button_bounding_box[index][0][1] + GameSettings::BUTTON_PADDING * 2,
+                button_bounding_box[index][0][0],
+                button_bounding_box[index][0][1],
+                button_bounding_box[index][1][0] - button_bounding_box[index][0][0],
+                button_bounding_box[index][1][1] - button_bounding_box[index][0][1],
                 background,
                 ZOrder::MIDDLE,
                 mode=:default

@@ -9,13 +9,19 @@ end
 module GameSettings
     SCREEN_WIDTH = 840
     SCREEN_HEIGHT = 550
-    BUTTON_PADDING = 3
+    BUTTON_PADDING = 10
     TRACKS = {
         Scene::MENU => "./assets/Ludum Dare 38 - Track 1.wav",
         Scene::GAME => "./assets/Ludum Dare 38 - Track 2.wav",
         Scene::SAW => "./assets/Ludum Dare 38 - Track 2.wav",
         "open" => "./assets/click1.ogg",
         "flag" => "./assets/click4.ogg",
+    }
+    SPRITE = {
+        "title" => "./assets/title.png",
+        "background" => "./assets/brown.png",
+        "button" => "./assets/grey_button01.png",
+        "button_hover" => "./assets/blue_button01.png",
     }
 end
 
