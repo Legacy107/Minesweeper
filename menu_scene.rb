@@ -9,7 +9,7 @@ end
 
 def menu_gen_box(game, font_title, font_text)
     bounding_box = []
-    y_offset = GameSettings::SCREEN_HEIGHT * 0.25 + font_title.height * 3 # below game title
+    y_offset = GameSettings::SCREEN_HEIGHT * 0.25 + font_title.height * 2.5 # below game title
 
     menu_get_buttons().each() do |button|
         x_start = center_text(font_text, button, GameSettings::SCREEN_WIDTH)

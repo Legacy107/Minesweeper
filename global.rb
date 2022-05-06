@@ -23,6 +23,9 @@ module GameSettings
         "button" => "./assets/grey_button01.png",
         "button_hover" => "./assets/blue_button01.png",
     }
+    FONT = {
+        "title" => "./assets/FredokaOne-Regular.ttf",
+    }
 end
 
 module GameRules

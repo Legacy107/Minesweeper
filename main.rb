@@ -16,7 +16,7 @@ class GameWindow < Gosu::Window
         self.caption = "Minesawyer"
 
         @background = Gosu::Image.new(GameSettings::SPRITE["background"], { :tileable => true })
-        @font_title = Gosu::Font.new(26)
+        @font_title = Gosu::Font.new(35, { :name => GameSettings::FONT["title"] })
         @font_text = Gosu::Font.new(20)
         @button_bounding_box = [-1]
         @prev_key = nil

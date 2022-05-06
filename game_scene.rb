@@ -17,7 +17,7 @@ def game_gen_box(game, font_title, font_text)
         [GameSettings::SCREEN_WIDTH - 10, 10 + font_text.height]
     ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
-    top_margin = GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1
+    top_margin = GameSettings::SCREEN_HEIGHT * 0.1
     x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
     y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game.height) / 2.0 + top_margin
     for i in 1..game.height
