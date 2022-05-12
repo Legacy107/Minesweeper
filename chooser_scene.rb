@@ -120,7 +120,8 @@ def chooser_input(game, key_id)
             game.init_board(
                 GameRules::BOARD_OPTIONS[game.mode][i][1],
                 GameRules::BOARD_OPTIONS[game.mode][i][2],
-                GameRules::BOARD_OPTIONS[game.mode][i][3]
+                GameRules::BOARD_OPTIONS[game.mode][i][3],
+                GameRules::BOARD_OPTIONS[game.mode][i][4]
             )
 
             if game.mode == 0

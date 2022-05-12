@@ -62,7 +62,11 @@ end
 
 def game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     remainingFlagsText = "Remaining Flags: #{game.mines - game.flags}"
-    timerText = "Time: #{format_duration(get_duration(game.start_time))}"
+    if game.max_time != 0
+        timerText = "Time left: #{format_duration(game.max_time - get_duration(game.start_time))}"
+    else
+        timerText = "Time: #{format_duration(get_duration(game.start_time))}"
+    end
 
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
     button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
@@ -156,7 +160,7 @@ def game_input(game, key_id)
     if key_id == 0
         save_board(
             game.width, game.height, game.mines, game.seed,
-            game.flags, get_duration(game.start_time), game.mask
+            game.flags, get_duration(game.start_time), game.max_time, game.mask
         )
         game.change_scene(Scene::MENU)
         flag = true
@@ -246,6 +250,7 @@ def game_process(game, key_id)
         return
     end
     if game_input(game, key_id)
+        # win if opened all cell without mines
         if check_win(
             game.flags, game.mines,
             game.width, game.height,
@@ -260,5 +265,11 @@ def game_process(game, key_id)
             update_scoreboard(file, game.score)
             game.change_scene(Scene::FINISH)
         end
+    end
+
+    # lose on timeout
+    if (game.max_time != 0 && get_duration(game.start_time) >= game.max_time)
+        game.score = get_duration(game.start_time)
+        game.change_scene(Scene::FINISH)
     end
 end

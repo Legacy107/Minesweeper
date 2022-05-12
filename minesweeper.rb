@@ -3,7 +3,7 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :mode, :flags, :remaining_mines, :start_time, :score, :gen_bounding_box, :auto, :tick
+    attr_accessor :mode, :flags, :remaining_mines, :start_time, :score, :gen_bounding_box, :auto, :tick, :max_time
     attr_reader :mines, :width, :height, :board, :mask, :seed, :current_scene
 
     def initialize        
@@ -21,6 +21,7 @@ class Minesweeper
         @flags = 0
         @mode = 0 # 0: minesweeper  1: minesawyer
         @start_time = nil
+        @max_time = 0
         @score = nil
         @auto = false
         @tick = 0
@@ -64,10 +65,11 @@ class Minesweeper
         @mask.clear()
     end
 
-    def get_blank_board(width, height, mines, seed)
+    def get_blank_board(width, height, mines, max_time, seed)
         @width = width
         @height = height
         @mines = mines
+        @max_time = max_time
         @seed = seed
 
         for i in 0..(height - 1)
@@ -79,11 +81,11 @@ class Minesweeper
         end
     end
 
-    def init_board(width, height, mines, seed = nil)
+    def init_board(width, height, mines, max_time, seed = nil)
         @auto = false
         @start_time = nil
         reset_board()
-        get_blank_board(width, height, mines, seed)
+        get_blank_board(width, height, mines, max_time, seed)
     end
 
     def populate_board(x = -10, y = -10)
@@ -113,10 +115,10 @@ class Minesweeper
         end
         
         # Read board
-        width, height, mines, seed, flags, duration = board_info
+        width, height, mines, seed, flags, duration, max_time = board_info
         seed = (seed == -1 ? nil : seed)
 
-        self.init_board(width, height, mines, seed)
+        self.init_board(width, height, mines, max_time, seed)
         if seed != nil
             x = seed % 100 / 10
             y = seed % 10
@@ -126,7 +128,7 @@ class Minesweeper
         @flags = flags
         @start_time = (
             seed ?
-            Time.at(@start_time.to_f() - duration.to_f() / 10000.0) :
+            Time.at(@start_time.to_f() - duration.to_f() / 1000.0) :
             nil
         )
 

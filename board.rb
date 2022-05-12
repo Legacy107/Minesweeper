@@ -219,9 +219,9 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
     end
 end
 
-def save_board(width, height, mines, seed, flags, duration, mask)
+def save_board(width, height, mines, seed, flags, duration, max_time, mask)
     File.open("board.txt", "w") do |file|
-        file.write("#{width} #{height} #{mines} #{seed || -1} #{flags} #{duration}\n")
+        file.write("#{width} #{height} #{mines} #{seed || -1} #{flags} #{duration} #{max_time}\n")
         
         for i in 0..(height - 1)
             for j in 0..(width - 1)

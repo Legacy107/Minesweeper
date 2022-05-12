@@ -41,14 +41,14 @@ module GameRules
     
     BOARD_OPTIONS = [
         [
-            ["Beginner", 10, 10, 10],
-            ["Intermediate", 16, 16, 40],
-            ["Expert", 30, 16, 99],
+            ["Beginner", 10, 10, 10, 0],
+            ["Intermediate", 16, 16, 40, 0],
+            ["Expert", 16, 16, 40, 180000],
         ],
         [
-            ["Saw Beginner", 10, 10, 1],
-            ["Saw Intermediate", 16, 16, 4],
-            ["Saw Expert", 30, 16, 8],
+            ["Saw Beginner", 10, 10, 1, 0],
+            ["Saw Intermediate", 16, 16, 4, 0],
+            ["Saw Expert", 30, 16, 8, 0],
         ]
     ]
 end    
