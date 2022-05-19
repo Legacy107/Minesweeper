@@ -45,21 +45,21 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         ZOrder::TOP,
         1.0,
         1.0,
-        Gosu::Color::BLACK
+        GameSettings::COLOR["black_600"]
     )
     button_bg.draw_as_quad(
-        button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-        button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-        button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-        button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+        button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+        button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+        button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+        button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
         ZOrder::MIDDLE,
     )
     if mouse_over_button(mouse_x, mouse_y, button_bounding_box[0])
         button_hover_bg.draw_as_quad(
-            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[0][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[0][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
             ZOrder::MIDDLE,
         )
     end
@@ -80,21 +80,21 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         font_title.draw_text(
             "You win!",
             center_text(font_title, "You win!", GameSettings::SCREEN_WIDTH),
-            GameSettings::SCREEN_HEIGHT * 0.1,
+            GameSettings::SCREEN_HEIGHT * 0.05,
             ZOrder::TOP,
             1.0,
             1.0,
-            Gosu::Color::BLACK
+            GameSettings::COLOR["black_600"]
         )
 
         font_title.draw_text(
             highscore_text,
             center_text(font_title, highscore_text, GameSettings::SCREEN_WIDTH),
-            GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1.5,
+            GameSettings::SCREEN_HEIGHT * 0.05 + font_title.height * 1.5,
             ZOrder::TOP,
             1.0,
             1.0,
-            Gosu::Color::BLACK
+            GameSettings::COLOR["black_600"]
         )
     else
         font_title.draw_text(
@@ -104,7 +104,7 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
             ZOrder::TOP,
             1.0,
             1.0,
-            Gosu::Color::BLACK
+            GameSettings::COLOR["black_600"]
         )
     end
 

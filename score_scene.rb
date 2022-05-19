@@ -31,7 +31,7 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
         ZOrder::TOP,
         1.0,
         1.0,
-        Gosu::Color::BLACK
+        GameSettings::COLOR["black_600"]
     )
 
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
@@ -44,22 +44,22 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
             ZOrder::TOP,
             1.0,
             1.0,
-            Gosu::Color::BLACK
+            GameSettings::COLOR["black_600"]
         )
         button_bg.draw_as_quad(
-            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
             ZOrder::MIDDLE,
         )
 
         if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
             button_hover_bg.draw_as_quad(
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
                 ZOrder::MIDDLE,
             )
         end
@@ -67,19 +67,28 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
 
     x_offset = 20
     y_offset = GameSettings::SCREEN_HEIGHT * 0.2
+    font_subtitle = Gosu::Font.new(20, { :name => GameSettings::FONT["title"] })
     for i in 0..(GameRules::BOARD_OPTIONS.length - 1)
         for j in 0..(GameRules::BOARD_OPTIONS[i].length - 1)
             scores = get_scores(GameRules::BOARD_OPTIONS[i][j][0])
             y_offset = GameSettings::SCREEN_HEIGHT * 0.2 + font_text.height * 10.5 * i
 
-            font_text.draw_text(
+            font_subtitle.draw_text(
                 "#{GameRules::BOARD_OPTIONS[i][j][0]} scoreboard",
                 x_offset,
                 y_offset,
                 ZOrder::TOP,
                 1.0,
                 1.0,
-                Gosu::Color::BLACK
+                GameSettings::COLOR["black_600"]
+            )
+            Gosu.draw_rect(
+                x_offset - GameSettings::BUTTON_PADDING,
+                y_offset - GameSettings::BUTTON_PADDING,
+                (GameSettings::SCREEN_WIDTH - 50) / 3,
+                font_text.height * 1.5 * 6 + GameSettings::BUTTON_PADDING,
+                GameSettings::COLOR["yellow_200"],
+                ZOrder::MIDDLE
             )
             y_offset += font_text.height * 1.5
 
@@ -96,7 +105,7 @@ def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_
                     ZOrder::TOP,
                     1.0,
                     1.0,
-                    Gosu::Color::BLACK
+                    GameSettings::COLOR["black_600"]
                 )
                 y_offset += font_text.height * 1.5
             end

@@ -1,3 +1,5 @@
+require "gosu"
+
 module ZOrder
     BACKGROUND, MIDDLE, TOP = *0..2
 end
@@ -25,6 +27,17 @@ module GameSettings
     }
     FONT = {
         "title" => "./assets/FredokaOne-Regular.ttf",
+    }
+    COLOR = {
+        "yellow_200" => Gosu::Color.rgba(255, 247, 154, 90),
+        "yellow_400" => Gosu::Color.rgba(255, 247, 154, 255),
+        "black_400" => Gosu::Color.rgba(54, 54, 57, 255),
+        "black_600" => Gosu::Color::BLACK,
+        "white_600" => Gosu::Color::WHITE,
+        "gray_400" => Gosu::Color.rgba(143, 129, 125, 255),
+        "red_400" => Gosu::Color.rgba(237, 28, 36, 255),
+        "green_400" => Gosu::Color.rgba(30, 220, 123, 255),
+        "blue_400" => Gosu::Color.rgba(0, 143, 212, 255),
     }
 end
 

@@ -44,23 +44,23 @@ def menu_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
             ZOrder::TOP,
             1.0,
             1.0,
-            Gosu::Color::BLACK
+            GameSettings::COLOR["black_600"]
         )
         button_bg.draw_as_quad(
-            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+            button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
             ZOrder::MIDDLE,
         )
 
 
         if mouse_over_button(mouse_x, mouse_y, button_bounding_box[index])
             button_hover_bg.draw_as_quad(
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
-                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, Gosu::Color::WHITE,
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][0][1] - GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][1][0] + GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
+                button_bounding_box[index][0][0] - GameSettings::BUTTON_PADDING, button_bounding_box[index][1][1] + GameSettings::BUTTON_PADDING, GameSettings::COLOR["white_600"],
                 ZOrder::MIDDLE,
             )
         end

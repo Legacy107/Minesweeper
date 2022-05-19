@@ -172,28 +172,28 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
         for column in 0..(width - 1)
             index = row * width + column
             text = ""
-            color = Gosu::Color::BLACK
-            background = Gosu::Color::GRAY
+            color = GameSettings::COLOR["gray_400"]
+            background = GameSettings::COLOR["black_400"]
 
             if mask[row][column] == -1
                 text = "F"
-                color = Gosu::Color::YELLOW
+                color = GameSettings::COLOR["yellow_400"]
             elsif mask[row][column] == 0 || mask[row][column] > 1
             elsif board[row][column] == -1
                 text = '*'
-                color = Gosu::Color::RED
+                color = GameSettings::COLOR["red_400"]
             elsif board[row][column] == 0
                 text = board[row][column].to_s()
             else
                 text = board[row][column].to_s()
-                color = Gosu::Color::GREEN
+                color = GameSettings::COLOR["green_400"]
             end
 
             if (
                 mouse_over_button(mouse_x, mouse_y, button_bounding_box[index]) ||
                 mask[row][column] > 1
             )
-                background = Gosu::Color::AQUA
+                background = GameSettings::COLOR["blue_400"]
             end
             
             Gosu.draw_rect(
