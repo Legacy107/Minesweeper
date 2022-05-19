@@ -4,7 +4,7 @@ require "./minesweeper.rb"
 require "./util.rb"
 
 def menu_get_buttons()
-    return ["NEW GAME", "CONTINUE", "SCOREBOARD", "MINESAWYER", "EXIT"]
+    return ["NEW GAME", "CONTINUE", "SCOREBOARD", "MINESAWYER", "CREDIT", "EXIT"]
 end
 
 def menu_gen_box(game, font_title, font_text)
@@ -91,6 +91,10 @@ def menu_input(game, key_id)
         return true
     end
     if key_id == 4
+        game.change_scene(Scene::CREDIT)
+        return true
+    end
+    if key_id == 5
         game.change_scene(Scene::EXIT)
         return true
     end

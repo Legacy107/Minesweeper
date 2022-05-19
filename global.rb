@@ -5,7 +5,7 @@ module ZOrder
 end
 
 module Scene
-    MENU, CHOOSER, GAME, SAW, FINISH, SCORE, EXIT = *0..6
+    MENU, CHOOSER, GAME, SAW, FINISH, SCORE, CREDIT, EXIT = *0..6
 end
 
 module GameSettings
@@ -38,6 +38,14 @@ module GameSettings
         "red_400" => Gosu::Color.rgba(237, 28, 36, 255),
         "green_400" => Gosu::Color.rgba(30, 220, 123, 255),
         "blue_400" => Gosu::Color.rgba(0, 143, 212, 255),
+    }
+    CREDIT = {
+        "Developed by" => ["Quoc Mai"],
+        "Graphic" => ["Kenney at www.kenney.nl", "Pixel Frog"],
+        "SFX & Music" => [
+            "Kenney at www.kenney.nl",
+            "Ludum Dare 38 - Track 1 & 2 by Abstraction at www.abstractionmusic.com",
+        ],
     }
 end
 

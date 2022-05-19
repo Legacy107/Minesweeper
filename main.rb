@@ -9,6 +9,7 @@ require "./game_scene.rb"
 require "./end_scene.rb"
 require "./score_scene.rb"
 require "./saw_game_scene.rb"
+require "./credit.rb"
 
 class GameWindow < Gosu::Window
     def initialize()
@@ -27,6 +28,7 @@ class GameWindow < Gosu::Window
         @game.add_scene(Scene::GAME, method(:game_process), method(:game_draw), method(:game_gen_box))
         @game.add_scene(Scene::SAW, method(:saw_game_process), method(:saw_game_draw), method(:saw_gen_box))
         @game.add_scene(Scene::SCORE, method(:score_process), method(:score_draw), method(:score_gen_box))
+        @game.add_scene(Scene::CREDIT, method(:credit_process), method(:credit_draw), method(:credit_gen_box))
         @game.change_scene(Scene::MENU)
 
         @sfx_open = Gosu::Sample.new(GameSettings::TRACKS["open"])
