@@ -65,13 +65,13 @@ def score_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, 
         end
     end
 
-    x_offset = 20
-    y_offset = GameSettings::SCREEN_HEIGHT * 0.2
+    x_offset = 30
     font_subtitle = Gosu::Font.new(20, { :name => GameSettings::FONT["title"] })
     for i in 0..(GameRules::BOARD_OPTIONS.length - 1)
+        score_board_width = (GameSettings::SCREEN_WIDTH - (GameRules::BOARD_OPTIONS[i].length + 1) * 30) / GameRules::BOARD_OPTIONS[i].length
         for j in 0..(GameRules::BOARD_OPTIONS[i].length - 1)
             scores = get_scores(GameRules::BOARD_OPTIONS[i][j][0])
-            y_offset = GameSettings::SCREEN_HEIGHT * 0.2 + font_text.height * 10.5 * i
+            y_offset = GameSettings::SCREEN_HEIGHT * 0.2 + font_text.height * 11.5 * i
 
             font_subtitle.draw_text(
                 "#{GameRules::BOARD_OPTIONS[i][j][0]} scoreboard",
@@ -85,8 +85,8 @@ def score_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, 
             Gosu.draw_rect(
                 x_offset - GameSettings::BUTTON_PADDING,
                 y_offset - GameSettings::BUTTON_PADDING,
-                (GameSettings::SCREEN_WIDTH - 50) / 3,
-                font_text.height * 1.5 * 6 + GameSettings::BUTTON_PADDING,
+                score_board_width + GameSettings::BUTTON_PADDING * 2,
+                font_text.height * 1.5 * 6 + GameSettings::BUTTON_PADDING * 2,
                 GameSettings::COLOR["yellow_200"],
                 ZOrder::MIDDLE
             )
@@ -110,9 +110,9 @@ def score_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, 
                 y_offset += font_text.height * 1.5
             end
 
-            x_offset += (GameSettings::SCREEN_HEIGHT / GameRules::BOARD_OPTIONS.length).round()
+            x_offset += score_board_width + 30
         end
-        x_offset = 15
+        x_offset = 30
     end
 end
 

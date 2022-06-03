@@ -24,7 +24,7 @@ end
 
 def chooser_gen_box(game_state, font_title, font_text)
     bounding_box = []
-    y_offset = GameSettings::SCREEN_HEIGHT * 0.15 + font_title.height * 2.5 # below the title
+    y_offset = GameSettings::SCREEN_HEIGHT * 0.2 + font_title.height * 2.5 # below the title
 
     chooser_get_buttons(game_state).each() do |button|
         x_start = center_text(font_text, button, GameSettings::SCREEN_WIDTH)
@@ -43,7 +43,7 @@ def chooser_draw(game_state, font_title, font_text, button_bounding_box, mouse_x
     font_title.draw_text(
         "Choose a board",
         center_text(font_title, "Choose a board", GameSettings::SCREEN_WIDTH),
-        GameSettings::SCREEN_HEIGHT * 0.15,
+        GameSettings::SCREEN_HEIGHT * 0.2,
         ZOrder::TOP,
         1.0,
         1.0,
