@@ -14,7 +14,7 @@ require "./credit_scene.rb"
 
 class GameWindow < Gosu::Window
     def initialize()
-        super(GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, false)
+        super(GameSettings::SCREEN_WIDTH, GameSettings::SCREEN_HEIGHT, {fullscreen: false})
         self.caption = "Minesawyer"
 
         @background = Gosu::Image.new(GameSettings::SPRITE["background"], { :tileable => true })
@@ -89,6 +89,8 @@ class GameWindow < Gosu::Window
                     @game.process(@game_state, -index)
                 end
             end
+        when Gosu::KB_F
+            self.fullscreen = !self.fullscreen?
         when Gosu::KB_ESCAPE
             close()
         else
