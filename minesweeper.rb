@@ -40,7 +40,7 @@ class Minesweeper
         if (GameSettings::TRACKS[scene] && @track_location != GameSettings::TRACKS[scene])
             @track_location = GameSettings::TRACKS[scene]
             @track = Gosu::Song.new(@track_location)
-            @track.volume = 0.4
+            @track.volume = 0.25
             @track.play(looping=true)
         end
     end
