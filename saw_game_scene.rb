@@ -5,7 +5,7 @@ require "./util.rb"
 require "./board.rb"
 require "./score.rb"
 
-def saw_gen_box(game, font_title, font_text)
+def saw_gen_box(game_state, font_title, font_text)
     bounding_box = []
 
     bounding_box << [
@@ -14,10 +14,10 @@ def saw_gen_box(game, font_title, font_text)
     ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
     top_margin = GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1
-    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
-    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game.height) / 2.0 + top_margin
-    for i in 1..game.height
-        for j in 1..game.width
+    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game_state.width) / 2.0
+    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game_state.height) / 2.0 + top_margin
+    for i in 1..game_state.height
+        for j in 1..game_state.width
             bounding_box << [
                 [x_offset, y_offset],
                 [x_offset + cell_size, y_offset + cell_size]
@@ -26,7 +26,7 @@ def saw_gen_box(game, font_title, font_text)
             x_offset += cell_size
         end
 
-        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
+        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game_state.width) / 2.0
         y_offset += cell_size
     end
     bounding_box << Scene::SAW
@@ -56,9 +56,9 @@ def draw_instruction(font_text)
     )
 end
 
-def saw_game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
-    remainingFlagsText = "Remaining Mines: #{game.remaining_mines}"
-    timerText = "Time: #{format_duration(get_duration(game.start_time))}"
+def saw_game_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
+    remainingFlagsText = "Remaining Mines: #{game_state.remaining_mines}"
+    timerText = "Time: #{format_duration(get_duration(game_state.start_time))}"
 
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
     button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
@@ -109,8 +109,8 @@ def saw_game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mou
     )
 
     draw_board(
-        game.width, game.height,
-        game.board, game.mask,
+        game_state.width, game_state.height,
+        game_state.board, game_state.mask,
         font_text, button_bounding_box.slice(1..-1),
         mouse_x, mouse_y
     )
@@ -118,39 +118,39 @@ def saw_game_draw(game, font_title, font_text, button_bounding_box, mouse_x, mou
     draw_instruction(font_text)
 end
 
-def saw_game_input(game, key_id)
+def saw_game_input(game, game_state, key_id)
     flag = false
 
     if key_id == 0
         game.change_scene(Scene::MENU)
         flag = true
     elsif key_id
-        cell_x = (key_id.abs() - 1) % game.width
-        cell_y = (key_id.abs() - 1).div(game.width)
+        cell_x = (key_id.abs() - 1) % game_state.width
+        cell_y = (key_id.abs() - 1).div(game_state.width)
 
         # right click -> open a cell
-        if key_id > 0 && game.mask[cell_y][cell_x] == 0
-            if open_cell(cell_x, cell_y, game)
-                game.remaining_mines -= 1
-                if game.remaining_mines == 0
-                    game.score = get_duration(game.start_time)
+        if key_id > 0 && game_state.mask[cell_y][cell_x] == 0
+            if open_cell(cell_x, cell_y, game_state)
+                game_state.remaining_mines -= 1
+                if game_state.remaining_mines == 0
+                    game_state.score = get_duration(game_state.start_time)
                     file = (
-                        GameRules::BOARD_OPTIONS[game.mode].filter() {|board|
-                            board[3] == game.mines
+                        GameRules::BOARD_OPTIONS[game_state.mode].filter() {|board|
+                            board[3] == game_state.mines
                         }
                     )[0][0]
-                    update_scoreboard(file, game.score)
+                    update_scoreboard(file, game_state.score)
                     game.change_scene(Scene::FINISH)
                 end
             else
-                game.start_time = game.start_time - GameRules::SAW_PENALTY_DURATION
+                game_state.start_time = game_state.start_time - GameRules::SAW_PENALTY_DURATION
             end
             flag = true
         # left click -> flag a cell
-        elsif key_id < 0 && game.mask[cell_y][cell_x] != 1
-            game.flags = flag_cell(
+        elsif key_id < 0 && game_state.mask[cell_y][cell_x] != 1
+            game_state.flags = flag_cell(
                 cell_x, cell_y,
-                game.flags, game.mask
+                game_state.flags, game_state.mask
             )
             flag = true
         end
@@ -159,6 +159,6 @@ def saw_game_input(game, key_id)
     return flag
 end
 
-def saw_game_process(game, key_id)
-   saw_game_input(game, key_id)
+def saw_game_process(game, game_state, key_id)
+   saw_game_input(game, game_state, key_id)
 end

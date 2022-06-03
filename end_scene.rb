@@ -5,7 +5,7 @@ require "./util.rb"
 require "./score.rb"
 require "./board.rb"
 
-def end_gen_box(game, font_title, font_text)
+def end_gen_box(game_state, font_title, font_text)
     bounding_box = []
 
     bounding_box << [
@@ -14,10 +14,10 @@ def end_gen_box(game, font_title, font_text)
     ]
     cell_size = [font_text.text_width("XX"), font_text.height].max()
     top_margin = GameSettings::SCREEN_HEIGHT * 0.1 + font_title.height * 1
-    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
-    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game.height) / 2.0 + top_margin
-    for i in 1..game.height
-        for j in 1..game.width
+    x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game_state.width) / 2.0
+    y_offset = (GameSettings::SCREEN_HEIGHT - top_margin - cell_size * game_state.height) / 2.0 + top_margin
+    for i in 1..game_state.height
+        for j in 1..game_state.width
             bounding_box << [
                 [x_offset, y_offset],
                 [x_offset + cell_size, y_offset + cell_size]
@@ -26,7 +26,7 @@ def end_gen_box(game, font_title, font_text)
             x_offset += cell_size
         end
 
-        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game.width) / 2.0
+        x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game_state.width) / 2.0
         y_offset += cell_size
     end
     bounding_box << Scene::FINISH
@@ -34,7 +34,7 @@ def end_gen_box(game, font_title, font_text)
     return bounding_box
 end
 
-def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
+def end_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
     button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
     # Back button
@@ -64,18 +64,18 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
         )
     end
 
-    if game.mode == 1 || check_win(
-        game.flags, game.mines,
-        game.width, game.height,
-        game.board, game.mask
+    if game_state.mode == 1 || check_win(
+        game_state.flags, game_state.mines,
+        game_state.width, game_state.height,
+        game_state.board, game_state.mask
     )
         file = (
-            GameRules::BOARD_OPTIONS[game.mode].filter() {|board|
-                board[3] == game.mines
+            GameRules::BOARD_OPTIONS[game_state.mode].filter() {|board|
+                board[3] == game_state.mines
             }
         )[0][0]
         highscore = get_highscore(file)
-        highscore_text = "Score: #{format_duration(game.score)}     Highscore: #{format_duration(highscore)}"
+        highscore_text = "Score: #{format_duration(game_state.score)}     Highscore: #{format_duration(highscore)}"
 
         font_title.draw_text(
             "You win!",
@@ -109,8 +109,8 @@ def end_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     end
 
     draw_board(
-        game.width, game.height,
-        game.board, game.mask,
+        game_state.width, game_state.height,
+        game_state.board, game_state.mask,
         font_text, button_bounding_box.slice(1..-1),
         -1, -1
     )
@@ -124,10 +124,10 @@ def end_input(game, key_id)
     return false
 end
 
-def end_process(game, key_id)
-    for row in 0..(game.height - 1)
-        for column in 0..(game.width - 1)
-            game.mask[row][column] = 1
+def end_process(game, game_state, key_id)
+    for row in 0..(game_state.height - 1)
+        for column in 0..(game_state.width - 1)
+            game_state.mask[row][column] = 1
         end
     end
 

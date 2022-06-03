@@ -67,15 +67,15 @@ def menu_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y
     end
 end
 
-def menu_input(game, key_id)
+def menu_input(game, game_state, key_id)
     if key_id == 0
-        game.mode = 0
+        game_state.mode = 0
         game.change_scene(Scene::CHOOSER)
         return true
     end
     if key_id == 1
-        game.mode = 0;
-        if !game.load_board()
+        game_state.mode = 0;
+        if !load_board(game_state)
             return false
         end
         game.change_scene(Scene::GAME)
@@ -86,7 +86,7 @@ def menu_input(game, key_id)
         return true
     end
     if key_id == 3
-        game.mode = 1
+        game_state.mode = 1
         game.change_scene(Scene::CHOOSER)
         return true
     end
@@ -102,6 +102,6 @@ def menu_input(game, key_id)
     return false
 end
 
-def menu_process(game, key_id)
-    menu_input(game, key_id)
+def menu_process(game, game_state, key_id)
+    menu_input(game, game_state, key_id)
 end

@@ -2,7 +2,7 @@ require "gosu"
 require "./global.rb"
 require "./util.rb"
 
-def credit_gen_box(game, font_title, font_text)
+def credit_gen_box(game_state, font_title, font_text)
     bounding_box = []
 
     bounding_box << [
@@ -12,7 +12,7 @@ def credit_gen_box(game, font_title, font_text)
     return bounding_box
 end
 
-def credit_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
+def credit_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
     button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
     # Back button
@@ -80,6 +80,6 @@ def credit_input(game, key_id)
     return false
 end
 
-def credit_process(game, key_id)
+def credit_process(game, game_state, key_id)
     credit_input(game, key_id)
 end

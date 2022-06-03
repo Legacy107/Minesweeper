@@ -2,6 +2,7 @@ require "io/console"
 require "gosu"
 require "./util.rb"
 require "./minesweeper.rb"
+require "./game_state.rb"
 require "./global.rb"
 require "./menu_scene.rb"
 require "./chooser_scene.rb"
@@ -9,7 +10,7 @@ require "./game_scene.rb"
 require "./end_scene.rb"
 require "./score_scene.rb"
 require "./saw_game_scene.rb"
-require "./credit.rb"
+require "./credit_scene.rb"
 
 class GameWindow < Gosu::Window
     def initialize()
@@ -30,6 +31,7 @@ class GameWindow < Gosu::Window
         @game.add_scene(Scene::SCORE, method(:score_process), method(:score_draw), method(:score_gen_box))
         @game.add_scene(Scene::CREDIT, method(:credit_process), method(:credit_draw), method(:credit_gen_box))
         @game.change_scene(Scene::MENU)
+        @game_state = get_new_game_state()
 
         @sfx_open = Gosu::Sample.new(GameSettings::TRACKS["open"])
         @sfx_flag = Gosu::Sample.new(GameSettings::TRACKS["flag"])
@@ -41,10 +43,10 @@ class GameWindow < Gosu::Window
 
     def update()
         if @button_bounding_box.last() != @game.current_scene
-            @button_bounding_box = @game.gen_bounding_box[@game.current_scene].call(@game, @font_title, @font_text)
+            @button_bounding_box = @game.gen_bounding_box[@game.current_scene].call(@game_state, @font_title, @font_text)
         end
 
-        if @game.process(nil)
+        if @game.process(@game_state, nil)
             $stdout.clear_screen()
             close()
         end
@@ -68,7 +70,7 @@ class GameWindow < Gosu::Window
   
     def draw()
         self.draw_background()
-        @game.draw(@font_title, @font_text, @button_bounding_box, mouse_x, mouse_y)
+        @game.draw(@game_state, @font_title, @font_text, @button_bounding_box, mouse_x, mouse_y)
     end
 
     def button_down(id)
@@ -77,20 +79,20 @@ class GameWindow < Gosu::Window
             @button_bounding_box.each_with_index do |button, index|
                 if mouse_over_button(mouse_x, mouse_y, button)
                     @sfx_open.play()
-                    @game.process(index)
+                    @game.process(@game_state, index)
                 end
             end
         when Gosu::KB_M
             @button_bounding_box.each_with_index do |button, index|
                 if mouse_over_button(mouse_x, mouse_y, button)
                     @sfx_flag.play()
-                    @game.process(-index)
+                    @game.process(@game_state, -index)
                 end
             end
         when Gosu::KB_ESCAPE
             close()
         else
-            @game.process(id)
+            @game.process(@game_state, id)
         end
     end
 end

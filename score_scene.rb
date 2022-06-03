@@ -11,7 +11,7 @@ def score_get_buttons()
     return ["Back"]
 end
 
-def score_gen_box(game, font_title, font_text)
+def score_gen_box(game_state, font_title, font_text)
     bounding_box = []
 
     bounding_box << [
@@ -23,7 +23,7 @@ def score_gen_box(game, font_title, font_text)
     return bounding_box
 end
 
-def score_draw(game, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
+def score_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     font_title.draw_text(
         "High Score",
         center_text(font_title, "High Score", GameSettings::SCREEN_WIDTH),
@@ -124,6 +124,6 @@ def score_input(game, key_id)
     return false
 end
 
-def score_process(game, key_id)
+def score_process(game, game_state, key_id)
     score_input(game, key_id)
 end

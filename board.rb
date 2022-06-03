@@ -103,19 +103,19 @@ def saw_gen_board(board, width, height, mines, seed, x, y)
     return seed
 end
 
-def open_cell(x, y, game)
-    if game.seed == nil
-        game.populate_board(x, y)
+def open_cell(x, y, game_state)
+    if game_state.seed == nil
+        populate_board(game_state, x, y)
     end
 
-    if game.board[y][x] == -1
-        game.mask[y][x] = 1
+    if game_state.board[y][x] == -1
+        game_state.mask[y][x] = 1
         return true
     end
-    if game.board[y][x] == 0
-        mass_open(x, y, game.width, game.height, game.board, game.mask)
+    if game_state.board[y][x] == 0
+        mass_open(x, y, game_state.width, game_state.height, game_state.board, game_state.mask)
     else
-        game.mask[y][x] = 1
+        game_state.mask[y][x] = 1
     end
     return false
 end
@@ -168,6 +168,17 @@ def check_win(flags, mines, width, height, board, mask)
 end
 
 def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse_x, mouse_y)
+    # Draw borders
+    Gosu.draw_rect(
+        button_bounding_box[0][0][0] - GameSettings::BUTTON_PADDING,
+        button_bounding_box[0][0][1] - GameSettings::BUTTON_PADDING,
+        button_bounding_box[-2][1][0] - button_bounding_box[0][0][0] + GameSettings::BUTTON_PADDING * 2,
+        button_bounding_box[-2][1][1] - button_bounding_box[0][0][1] + GameSettings::BUTTON_PADDING * 2,
+        GameSettings::COLOR["blue_900"],
+        ZOrder::MIDDLE,
+        mode=:default
+    )
+
     for row in 0..(height - 1)
         for column in 0..(width - 1)
             index = row * width + column
@@ -232,40 +243,40 @@ def save_board(width, height, mines, seed, flags, duration, max_time, mask)
     end
 end
 
-def clear_flag(game)
-    for row in 0..(game.height - 1)
-        for column in 0..(game.width - 1)
-            if game.mask[row][column] == -1
-                game.mask[row][column] = 0
+def clear_flag(game_state)
+    for row in 0..(game_state.height - 1)
+        for column in 0..(game_state.width - 1)
+            if game_state.mask[row][column] == -1
+                game_state.mask[row][column] = 0
             end
         end
     end
 
-    game.flags = 0
+    game_state.flags = 0
 end
 
 # play the best move based on the current state
 # return [x, y, action]
 # action: 2 -> flag, 3 -> open
-def get_next_move(game)
+def get_next_move(game_state)
     # open middle cell on first move
-    if game.seed == nil
-        return [game.width / 2, game.height / 2, 3]
+    if game_state.seed == nil
+        return [game_state.width / 2, game_state.height / 2, 3]
     end
 
     guess_factor = 2
     drow = [-1, -1, -1, 0, 0, 1, 1, 1]
     dcol = [-1, 0, 1, -1, 1, -1, 0, 1]
-    weights = Array.new(game.height) { Array.new(game.width, 0) }
+    weights = Array.new(game_state.height) { Array.new(game_state.width, 0) }
 
-    for row in 0..(game.height - 1)
-        for column in 0..(game.width - 1)
+    for row in 0..(game_state.height - 1)
+        for column in 0..(game_state.width - 1)
             # remove highlighting
-            if game.mask[row][column] > 1
-                game.mask[row][column] = 0
+            if game_state.mask[row][column] > 1
+                game_state.mask[row][column] = 0
             end
 
-            if game.mask[row][column] != 1 || game.board[row][column] == 0
+            if game_state.mask[row][column] != 1 || game_state.board[row][column] == 0
                 next
             end
 
@@ -274,27 +285,27 @@ def get_next_move(game)
             for i in 0..7
                 a_row = row + drow[i]
                 a_col = column + dcol[i]
-                if is_valid_cell(a_col, a_row, game.width, game.height)
-                    if game.mask[a_row][a_col] == 0
+                if is_valid_cell(a_col, a_row, game_state.width, game_state.height)
+                    if game_state.mask[a_row][a_col] == 0
                         count_empty += 1
                     end
 
-                    if game.mask[a_row][a_col] == -1
+                    if game_state.mask[a_row][a_col] == -1
                         count_flag += 1 
                     end
                 end
             end
 
-            if count_flag >= game.board[row][column]
+            if count_flag >= game_state.board[row][column]
                 weight = -Float::INFINITY
             else
-                weight = (game.board[row][column] - count_flag) / (count_empty - 1.0)
+                weight = (game_state.board[row][column] - count_flag) / (count_empty - 1.0)
             end
 
             for i in 0..7
                 a_row = row + drow[i]
                 a_col = column + dcol[i]
-                if is_valid_cell(a_col, a_row, game.width, game.height) && game.mask[a_row][a_col] == 0
+                if is_valid_cell(a_col, a_row, game_state.width, game_state.height) && game_state.mask[a_row][a_col] == 0
                     weights[a_row][a_col] += weight
                 end
             end
@@ -304,9 +315,9 @@ def get_next_move(game)
     min = Float::INFINITY
     s_row = -1
     s_col = -1
-    for row in 0..(game.height - 1)
-        for column in 0..(game.width - 1)
-            if game.mask[row][column] != 0
+    for row in 0..(game_state.height - 1)
+        for column in 0..(game_state.width - 1)
+            if game_state.mask[row][column] != 0
                 next
             end
 
@@ -340,6 +351,97 @@ def get_next_move(game)
     end
 
     return [s_col, s_row, 3]
+end
+
+def reset_board(game_state)
+    game_state.flags = 0
+    game_state.board.clear()
+    game_state.mask.clear()
+end
+
+def get_blank_board(game_state, width, height, mines, max_time, seed)
+    game_state.width = width
+    game_state.height = height
+    game_state.mines = mines
+    game_state.max_time = max_time
+    game_state.seed = seed
+
+    for i in 0..(height - 1)
+        board_row = Array.new(width, 0)
+        game_state.board << board_row
+
+        mask_row = Array.new(width, 0)
+        game_state.mask << mask_row
+    end
+end
+
+def init_board(game_state, width, height, mines, max_time, seed = nil)
+    game_state.auto = false
+    game_state.start_time = nil
+    reset_board(game_state)
+    get_blank_board(game_state, width, height, mines, max_time, seed)
+end
+
+def populate_board(game_state, x = -10, y = -10)
+    case game_state.mode
+    when 0
+        game_state.seed = gen_board(game_state.board, game_state.width, game_state.height, game_state.mines, game_state.seed, x, y)
+    when 1
+        game_state.seed = saw_gen_board(game_state.board, game_state.width, game_state.height, game_state.mines, game_state.seed, x, y)
+        game_state.remaining_mines = game_state.mines
+    end
+
+    game_state.start_time = Time.new()
+end
+
+def load_board(game_state)
+    duration = 0
+    file = File.open("board.txt")
+
+    # No board is found
+    board_info = file.gets()
+    if !board_info
+        file.close()
+        return false
+    end
+    board_info = board_info.split()
+    board_info.map!() do |element|
+        element.to_i()
+    end
+    
+    # Read board
+    width, height, mines, seed, flags, duration, max_time = board_info
+    seed = (seed == -1 ? nil : seed)
+
+    init_board(game_state, width, height, mines, max_time, seed)
+    if seed != nil
+        x = seed % 100 / 10
+        y = seed % 10
+        populate_board(game_state, x, y)
+    end
+
+    game_state.flags = flags
+    game_state.start_time = (
+        seed ?
+        Time.at(game_state.start_time.to_f() - duration.to_f() / 1000.0) :
+        nil
+    )
+
+    # Read mask
+    for i in 0..(height - 1)
+        mask_info = file.gets().split()
+        mask_info.map!() do |element|
+            element.to_i()
+        end
+
+        for j in 0..(width - 1)
+            game_state.mask[i][j] = mask_info[j]
+        end
+    end
+
+    file.close()
+
+    return true
 end
 
 def board()

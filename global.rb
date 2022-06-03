@@ -38,6 +38,7 @@ module GameSettings
         "red_400" => Gosu::Color.rgba(237, 28, 36, 255),
         "green_400" => Gosu::Color.rgba(30, 220, 123, 255),
         "blue_400" => Gosu::Color.rgba(0, 143, 212, 255),
+        "blue_900" => Gosu::Color.rgba(55, 108, 129, 255),
     }
     CREDIT = {
         "Developed by" => ["Quoc Mai"],
