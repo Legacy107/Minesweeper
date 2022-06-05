@@ -42,7 +42,10 @@ class GameWindow < Gosu::Window
     end
 
     def update()
-        if @button_bounding_box.last() != @game.current_scene
+        if (
+            @button_bounding_box.last() != @game.current_scene &&
+            @game.gen_bounding_box[@game.current_scene]
+        )
             @button_bounding_box = @game.gen_bounding_box[@game.current_scene].call(@game_state, @font_title, @font_text)
         end
 
