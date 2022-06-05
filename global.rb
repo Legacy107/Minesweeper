@@ -14,9 +14,9 @@ module GameSettings
     BUTTON_PADDING = 10
     SCORE_LIMIT = 5
     TRACKS = {
-        Scene::MENU => "./assets/Ludum Dare 38 - Track 1.wav",
-        Scene::GAME => "./assets/Ludum Dare 38 - Track 2.wav",
-        Scene::SAW => "./assets/Ludum Dare 38 - Track 2.wav",
+        Scene::MENU => "./assets/Ludum Dare 38 - Track 1.m4a",
+        Scene::GAME => "./assets/Ludum Dare 38 - Track 2.m4a",
+        Scene::SAW => "./assets/Ludum Dare 38 - Track 2.m4a",
         "open" => "./assets/click1.ogg",
         "flag" => "./assets/click4.ogg",
     }
