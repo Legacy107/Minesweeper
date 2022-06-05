@@ -1,11 +1,8 @@
 require "gosu"
 require "./global.rb"
-require "./minesweeper.rb"
 require "./util.rb"
 require "./score.rb"
 require "./board.rb"
-
-$SCORE_LIMIT = 5
 
 def score_get_buttons()
     return ["Back"]
@@ -92,7 +89,7 @@ def score_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, 
             )
             y_offset += font_text.height * 1.5
 
-            for id in 0..($SCORE_LIMIT - 1)
+            for id in 0..(GameSettings::SCORE_LIMIT - 1)
                 text = "#{id + 1}. "
                 if id < scores.length
                     text = text.concat(format_duration(scores[id]).to_s())

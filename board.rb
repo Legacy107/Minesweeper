@@ -41,6 +41,7 @@ def gen_mines(board, width, height, mines, seed, x, y)
         end
     end
 
+    # Randomize mine cells by shuffle the array and pick the first n mines
     cells.shuffle!(random: Random.new(seed))
 
     for i in 0..(mines - 1)
@@ -64,6 +65,7 @@ def gen_board(board, width, height, mines, seed, x, y)
     return seed
 end
 
+# Generate random board for minesawyer mode
 def saw_gen_board(board, width, height, mines, seed, x, y)
     drow = [-1, 0, 0, 1]
     dcol = [0, -1, 1, 0]
@@ -79,6 +81,7 @@ def saw_gen_board(board, width, height, mines, seed, x, y)
         end
     end
 
+    # Assign cells' value by doing BFS
     while !cell_queue.empty?()
         cell = cell_queue.pop()
         y = cell[0]
@@ -104,6 +107,7 @@ def saw_gen_board(board, width, height, mines, seed, x, y)
 end
 
 def open_cell(x, y, game_state)
+    # If it is the first click, generate the board first
     if game_state.seed == nil
         populate_board(game_state, x, y)
     end
@@ -132,6 +136,7 @@ def flag_cell(x, y, flags, mask)
     return flags
 end
 
+# DFS function to open all adjacent 0-cells recursively
 def mass_open(x, y, width, height, board, mask)
     drow = [-1, -1, -1, 0, 0, 1, 1, 1]
     dcol = [-1, 0, 1, -1, 1, -1, 0, 1]
@@ -151,6 +156,7 @@ def mass_open(x, y, width, height, board, mask)
     end
 end
 
+# Return true if all mines are flagged and other cells are opened
 def check_win(flags, mines, width, height, board, mask)
     if flags != mines
         return false
@@ -181,7 +187,7 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
 
     for row in 0..(height - 1)
         for column in 0..(width - 1)
-            index = row * width + column
+            index = row * width + column    # Board is flatten into 1D array
             text = ""
             color = GameSettings::COLOR["gray_400"]
             background = GameSettings::COLOR["black_400"]
@@ -230,6 +236,7 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
     end
 end
 
+# Write current board to a file
 def save_board(width, height, mines, seed, flags, duration, max_time, mask)
     File.open("board.txt", "w") do |file|
         file.write("#{width} #{height} #{mines} #{seed || -1} #{flags} #{duration} #{max_time}\n")
@@ -321,17 +328,17 @@ def get_next_move(game_state)
                 next
             end
 
+            # 100% no mine
             if weights[row][column] == -Float::INFINITY
-                min = weights[row][column]
-                s_row = row
-                s_col = column
-                break
+                return [column, row, 3]
             end
 
+            # 100% mine
             if weights[row][column] == Float::INFINITY
                 return [column, row, 2]
             end
 
+            # Open the cell with the lowest probability of containing a mine
             if weights[row][column] < min
                 min = weights[row][column]
                 s_row = row
@@ -343,10 +350,6 @@ def get_next_move(game_state)
                 s_row = row
                 s_col = column
             end
-        end
-
-        if weights[s_row][s_col] == -Float::INFINITY
-            break
         end
     end
 
@@ -382,6 +385,7 @@ def init_board(game_state, width, height, mines, max_time, seed = nil)
     get_blank_board(game_state, width, height, mines, max_time, seed)
 end
 
+# Fill board with mines and number based on the first click
 def populate_board(game_state, x = -10, y = -10)
     case game_state.mode
     when 0

@@ -1,7 +1,7 @@
+require "./global.rb"
 require "./util.rb"
 
-$score_limit = 5
-
+# Read scores from a file
 def get_scores(board)
     n = 0
     scores = [];
@@ -22,10 +22,11 @@ def get_highscore(mines)
     return scores[0]
 end
 
+# Insert new score and write to a file
 def update_scoreboard(board, score)
     scores = get_scores(board)
     File.open("score#{board}.txt", "w") do |file|
-        n = [$score_limit, scores.length + 1].min()
+        n = [GameSettings::SCORE_LIMIT, scores.length + 1].min()
         scores = scores.insert(upper_bound(scores, score), score)
         file.write("#{n}\n")
         for i in 0..(n - 1)
@@ -34,6 +35,7 @@ def update_scoreboard(board, score)
     end
 end
 
+# Testing
 def score()
     scores = get_scores(10)
     scores.each() do |score|

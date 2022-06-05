@@ -1,3 +1,4 @@
+# Binary search function
 def upper_bound(arr, n)
     if arr.empty?()
         return 0

@@ -3,10 +3,10 @@ require "./global.rb"
 require "./util.rb"
 
 class Minesweeper
-    attr_accessor :score, :gen_bounding_box
+    attr_accessor :gen_bounding_box
     attr_reader :current_scene
 
-    def initialize        
+    def initialize
         @process_scenes = {}
         @draw_scenes = {}
         @gen_bounding_box = {}

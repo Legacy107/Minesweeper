@@ -12,6 +12,7 @@ module GameSettings
     SCREEN_WIDTH = 960
     SCREEN_HEIGHT = 650
     BUTTON_PADDING = 10
+    SCORE_LIMIT = 5
     TRACKS = {
         Scene::MENU => "./assets/Ludum Dare 38 - Track 1.wav",
         Scene::GAME => "./assets/Ludum Dare 38 - Track 2.wav",

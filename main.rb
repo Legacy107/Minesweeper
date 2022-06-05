@@ -1,4 +1,3 @@
-require "io/console"
 require "gosu"
 require "./util.rb"
 require "./minesweeper.rb"
@@ -42,6 +41,8 @@ class GameWindow < Gosu::Window
     end
 
     def update()
+        # Get bounding boxes of all buttons in the current scene
+        # so that button clicking can be tracked
         if (
             @button_bounding_box.last() != @game.current_scene &&
             @game.gen_bounding_box[@game.current_scene]
@@ -50,12 +51,12 @@ class GameWindow < Gosu::Window
         end
 
         if @game.process(@game_state, nil)
-            $stdout.clear_screen()
             close()
         end
     end
 
     def draw_background()
+        # Repeat the sprite in a grid to form a background
         bg_x = 0
         while bg_x < GameSettings::SCREEN_WIDTH
             bg_y = 0
@@ -85,7 +86,7 @@ class GameWindow < Gosu::Window
                     @game.process(@game_state, index)
                 end
             end
-        when Gosu::KB_M
+        when Gosu::MsRight
             @button_bounding_box.each_with_index do |button, index|
                 if mouse_over_button(mouse_x, mouse_y, button)
                     @sfx_flag.play()

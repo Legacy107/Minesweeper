@@ -1,6 +1,5 @@
 require "gosu"
 require "./global.rb"
-require "./minesweeper.rb"
 require "./util.rb"
 require "./score.rb"
 require "./board.rb"

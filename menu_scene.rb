@@ -1,6 +1,5 @@
 require "gosu"
 require "./global.rb"
-require "./minesweeper.rb"
 require "./util.rb"
 
 def menu_get_buttons()
