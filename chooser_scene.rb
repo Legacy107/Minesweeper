@@ -140,7 +140,7 @@ def chooser_input(game, game_state, key_id)
         return true
     end
 
-    return false;
+    return false
 end
 
 def chooser_process(game, game_state, key_id)

@@ -71,7 +71,7 @@ end
 
 def util()
     # Driver code for testing
-    start = Time.new();
+    start = Time.new()
     sleep(3.14)
 
     puts(get_duration(start))

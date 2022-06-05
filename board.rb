@@ -400,6 +400,10 @@ end
 
 def load_board(game_state)
     duration = 0
+
+    if !File.exists?("board.txt")
+        return false
+    end
     file = File.open("board.txt")
 
     # No board is found

@@ -10,7 +10,7 @@ class Minesweeper
         @process_scenes = {}
         @draw_scenes = {}
         @gen_bounding_box = {}
-        @current_scene = nil;
+        @current_scene = nil
         @track = nil
         @track_location = ""
     end

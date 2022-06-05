@@ -4,17 +4,21 @@ require "./util.rb"
 # Read scores from a file
 def get_scores(board)
     n = 0
-    scores = [];
-    file = File.open("score#{board}.txt")
+    scores = []
 
+    if !File.exists?("score#{board}.txt")
+        return scores
+    end
+
+    file = File.open("score#{board}.txt")
     n = file.gets().to_i()
 
     for i in 0..(n - 1)
-        scores << file.gets().to_i();
+        scores << file.gets().to_i()
     end
 
     file.close()
-    return scores;
+    return scores
 end
 
 def get_highscore(mines)

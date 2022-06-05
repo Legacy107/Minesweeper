@@ -73,10 +73,10 @@ def menu_input(game, game_state, key_id)
         return true
     end
     if key_id == 1
-        game_state.mode = 0;
         if !load_board(game_state)
             return false
         end
+        game_state.mode = 0
         game.change_scene(Scene::GAME)
         return true
     end
