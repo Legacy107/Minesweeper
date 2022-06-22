@@ -98,7 +98,7 @@ class GameWindow < Gosu::Window
         when Gosu::KB_ESCAPE
             close()
         else
-            @game.process(@game_state, id)
+            @game.process(@game_state, nil)
         end
     end
 end
