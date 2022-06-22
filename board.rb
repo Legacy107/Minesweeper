@@ -305,8 +305,10 @@ def get_next_move(game_state)
 
             if count_flag >= game_state.board[row][column]
                 weight = -Float::INFINITY
+            elsif game_state.board[row][column] - count_flag === count_empty
+                weight = Float::INFINITY
             else
-                weight = (game_state.board[row][column] - count_flag) / (count_empty - 1.0)
+                weight = (game_state.board[row][column] - count_flag) / (count_empty)
             end
 
             for i in 0..7
