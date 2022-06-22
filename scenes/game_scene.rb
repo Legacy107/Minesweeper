@@ -1,8 +1,8 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
-require "./board.rb"
-require "./score.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
+require_relative "../utils/board.rb"
+require_relative "../utils/score.rb"
 
 def game_gen_box(game_state, font_title, font_text)
     bounding_box = []

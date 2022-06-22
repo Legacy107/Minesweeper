@@ -1,5 +1,5 @@
-require 'gosu'
-require './global.rb'
+require "gosu"
+require_relative "./global.rb"
 
 def is_valid_cell(x, y, width, height)
     return (0 <= x && x < width && 0 <= y && y < height)
@@ -197,7 +197,7 @@ def draw_board(width, height, board, mask, font_text, button_bounding_box, mouse
                 color = GameSettings::COLOR["yellow_400"]
             elsif mask[row][column] == 0 || mask[row][column] > 1
             elsif board[row][column] == -1
-                text = '*'
+                text = "*"
                 color = GameSettings::COLOR["red_400"]
             elsif board[row][column] == 0
                 text = board[row][column].to_s()

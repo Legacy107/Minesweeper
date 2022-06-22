@@ -1,8 +1,8 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
-require "./score.rb"
-require "./board.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
+require_relative "../utils/score.rb"
+require_relative "../utils/board.rb"
 
 def score_get_buttons()
     return ["Back"]

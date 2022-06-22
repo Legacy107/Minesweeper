@@ -1,6 +1,6 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
 
 def credit_gen_box(game_state, font_title, font_text)
     bounding_box = []

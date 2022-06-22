@@ -1,10 +1,10 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
-require "./board.rb"
-require "./score.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
+require_relative "../utils/score.rb"
+require_relative "../utils/board.rb"
 
-def saw_gen_box(game_state, font_title, font_text)
+def end_gen_box(game_state, font_title, font_text)
     bounding_box = []
 
     bounding_box << [
@@ -28,37 +28,12 @@ def saw_gen_box(game_state, font_title, font_text)
         x_offset = (GameSettings::SCREEN_WIDTH - cell_size * game_state.width) / 2.0
         y_offset += cell_size
     end
-    bounding_box << Scene::SAW
+    bounding_box << Scene::FINISH
 
     return bounding_box
 end
 
-def draw_instruction(font_text)
-    font_text.draw_text(
-        "Left click to open a cell",
-        GameSettings::SCREEN_WIDTH / 2.0 - font_text.text_width("Left click to open a cell") - 20,
-        GameSettings::SCREEN_HEIGHT - font_text.height - 10,
-        ZOrder::TOP,
-        1.0,
-        1.0,
-        GameSettings::COLOR["black_600"]
-    )
-
-    font_text.draw_text(
-        "Right click to set a flag",
-        GameSettings::SCREEN_WIDTH / 2.0 + 20,
-        GameSettings::SCREEN_HEIGHT - font_text.height - 10,
-        ZOrder::TOP,
-        1.0,
-        1.0,
-        GameSettings::COLOR["black_600"]
-    )
-end
-
-def saw_game_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
-    remainingFlagsText = "Remaining Mines: #{game_state.remaining_mines}"
-    timerText = "Time: #{format_duration(get_duration(game_state.start_time))}"
-
+def end_draw(game_state, font_title, font_text, button_bounding_box, mouse_x, mouse_y)
     button_bg = Gosu::Image.new(GameSettings::SPRITE["button"])
     button_hover_bg = Gosu::Image.new(GameSettings::SPRITE["button_hover"])
     # Back button
@@ -88,76 +63,72 @@ def saw_game_draw(game_state, font_title, font_text, button_bounding_box, mouse_
         )
     end
 
-    font_title.draw_text(
-        remainingFlagsText,
-        GameSettings::SCREEN_WIDTH / 2.0 - font_title.text_width(remainingFlagsText) - 20,
-        GameSettings::SCREEN_HEIGHT * 0.1,
-        ZOrder::TOP,
-        1.0,
-        1.0,
-        GameSettings::COLOR["black_600"]
+    if game_state.mode == 1 || check_win(
+        game_state.flags, game_state.mines,
+        game_state.width, game_state.height,
+        game_state.board, game_state.mask
     )
-    font_title.draw_text(
-        timerText,
-        GameSettings::SCREEN_WIDTH / 2.0 + 20,
-        GameSettings::SCREEN_HEIGHT * 0.1,
-        ZOrder::TOP,
-        1.0,
-        1.0,
-        GameSettings::COLOR["black_600"]
-    )
+        file = (
+            GameRules::BOARD_OPTIONS[game_state.mode].filter() {|board|
+                board[3] == game_state.mines
+            }
+        )[0][0]
+        highscore = get_highscore(file)
+        highscore_text = "Score: #{format_duration(game_state.score)}     Highscore: #{format_duration(highscore)}"
+
+        font_title.draw_text(
+            "You win!",
+            center_text(font_title, "You win!", GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.05,
+            ZOrder::TOP,
+            1.0,
+            1.0,
+            GameSettings::COLOR["black_600"]
+        )
+
+        font_title.draw_text(
+            highscore_text,
+            center_text(font_title, highscore_text, GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.05 + font_title.height * 1.5,
+            ZOrder::TOP,
+            1.0,
+            1.0,
+            GameSettings::COLOR["black_600"]
+        )
+    else
+        font_title.draw_text(
+            "You lose!",
+            center_text(font_title, "You lose!", GameSettings::SCREEN_WIDTH),
+            GameSettings::SCREEN_HEIGHT * 0.1,
+            ZOrder::TOP,
+            1.0,
+            1.0,
+            GameSettings::COLOR["black_600"]
+        )
+    end
 
     draw_board(
         game_state.width, game_state.height,
         game_state.board, game_state.mask,
         font_text, button_bounding_box.slice(1..-1),
-        mouse_x, mouse_y
+        -1, -1
     )
-
-    draw_instruction(font_text)
 end
 
-def saw_game_input(game, game_state, key_id)
-    flag = false
-
+def end_input(game, key_id)
     if key_id == 0
         game.change_scene(Scene::MENU)
-        flag = true
-    elsif key_id
-        cell_x = (key_id.abs() - 1) % game_state.width
-        cell_y = (key_id.abs() - 1).div(game_state.width)
+        return true
+    end
+    return false
+end
 
-        # right click -> open a cell
-        if key_id > 0 && game_state.mask[cell_y][cell_x] == 0
-            if open_cell(cell_x, cell_y, game_state)
-                game_state.remaining_mines -= 1
-                if game_state.remaining_mines == 0
-                    game_state.score = get_duration(game_state.start_time)
-                    file = (
-                        GameRules::BOARD_OPTIONS[game_state.mode].filter() {|board|
-                            board[3] == game_state.mines
-                        }
-                    )[0][0]
-                    update_scoreboard(file, game_state.score)
-                    game.change_scene(Scene::FINISH)
-                end
-            else
-                game_state.start_time = game_state.start_time - GameRules::SAW_PENALTY_DURATION
-            end
-            flag = true
-        # left click -> flag a cell
-        elsif key_id < 0 && game_state.mask[cell_y][cell_x] != 1
-            game_state.flags = flag_cell(
-                cell_x, cell_y,
-                game_state.flags, game_state.mask
-            )
-            flag = true
+def end_process(game, game_state, key_id)
+    for row in 0..(game_state.height - 1)
+        for column in 0..(game_state.width - 1)
+            game_state.mask[row][column] = 1
         end
     end
 
-    return flag
-end
-
-def saw_game_process(game, game_state, key_id)
-   saw_game_input(game, game_state, key_id)
+    end_input(game, key_id)
 end

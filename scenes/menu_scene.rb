@@ -1,6 +1,6 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
 
 def menu_get_buttons()
     return ["NEW GAME", "CONTINUE", "SCOREBOARD", "MINESAWYER", "CREDIT", "EXIT"]

@@ -1,6 +1,6 @@
 require "gosu"
-require "./global.rb"
-require "./util.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/util.rb"
 
 class Minesweeper
     attr_accessor :gen_bounding_box

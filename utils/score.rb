@@ -1,5 +1,5 @@
-require "./global.rb"
-require "./util.rb"
+require_relative "./global.rb"
+require_relative "./util.rb"
 
 # Read scores from a file
 def get_scores(board)

@@ -1,6 +1,6 @@
 require "gosu"
-require "./global.rb"
-require "./board.rb"
+require_relative "../utils/global.rb"
+require_relative "../utils/board.rb"
 
 def chooser_get_buttons(game_state)
     buttons = []
